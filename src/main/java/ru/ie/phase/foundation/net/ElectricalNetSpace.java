@@ -117,8 +117,6 @@ public class ElectricalNetSpace {
             NetGenerator generator = (NetGenerator) nodes.get(uuid);
             generator.updateConsumer(consumerId, aFloat);
         });
-
-        updateConsumerVoltage(consumer, cable);
     }
 
     public static void updateConsumerVoltage(UUID consumerId){
@@ -139,17 +137,17 @@ public class ElectricalNetSpace {
         clearGeneratorLosses(generatorId, nodeJoints.get(generatorId));
     }
 
-    private static void clearGeneratorLosses(UUID generatorId, UUID cableid){
-        clearGeneratorLosses(generatorId, cableid, new HashSet<>());
+    private static void clearGeneratorLosses(UUID generatorId, UUID cableId){
+        clearGeneratorLosses(generatorId, cableId, new HashSet<>());
     }
 
-    private static void clearGeneratorLosses(UUID generatorId, UUID cableid, HashSet<UUID> checked)
+    private static void clearGeneratorLosses(UUID generatorId, UUID cableId, HashSet<UUID> checked)
     {
-        UUID current = cableid;
+        UUID current = cableId;
         for(;;){
             ICable cable = cables.get(current);
+            removeConsumers(cable);
             cable.lossmap().remove(generatorId);
-            updateConsumers(cable);
             checked.add(current);
 
             Phase.LOGGER.debug("removing generator %s losses at %s".formatted(generatorId, current));
@@ -266,9 +264,12 @@ public class ElectricalNetSpace {
         return ratioMap;
     }
 
-    private static void updateConsumers(ICable cable){
-        cable.nodes().forEach(uuid -> {
-            if(nodes.get(uuid) instanceof NetConsumer) updatePowerStatement(uuid);
+    private static void removeConsumers(ICable cable){
+        cable.nodes().forEach(cuuid -> {
+            if(nodes.get(cuuid) instanceof NetConsumer)
+                cable.lossmap().keySet().forEach(guuid ->
+                        ((NetGenerator) nodes.get(guuid)).removeConsumer(cuuid)
+                );
         });
     }
 
