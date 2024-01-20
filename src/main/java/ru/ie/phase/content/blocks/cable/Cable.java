@@ -6,16 +6,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import ru.ie.phase.content.blocks.generic.AbstractNetBlock;
+import ru.ie.phase.content.blocks.generic.AbstractNodeBlock;
 import ru.ie.phase.foundation.net.*;
 
-public class Cable extends AbstractNetBlock implements EntityBlock {
+public class Cable extends AbstractNodeBlock implements EntityBlock {
 
     private final float loss;
 

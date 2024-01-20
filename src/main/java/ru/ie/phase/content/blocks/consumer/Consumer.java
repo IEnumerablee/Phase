@@ -11,14 +11,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import ru.ie.phase.content.blocks.cable.CableEntity;
-import ru.ie.phase.content.blocks.generic.AbstractNetBlock;
 import ru.ie.phase.content.blocks.generic.NodeBlock;
 import ru.ie.phase.declaration.BlockEntities;
-import ru.ie.phase.foundation.net.ElectricalNetSpace;
 import ru.ie.phase.foundation.net.NetConsumer;
-import ru.ie.phase.foundation.net.NetGenerator;
-import ru.ie.phase.foundation.net.NetIndexed;
 
 public class Consumer extends NodeBlock implements EntityBlock {
 

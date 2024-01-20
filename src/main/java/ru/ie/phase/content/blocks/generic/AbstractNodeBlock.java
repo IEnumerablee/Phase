@@ -6,9 +6,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import ru.ie.phase.foundation.net.NetIndexed;
 
-public abstract class AbstractNetBlock extends Block {
+public abstract class AbstractNodeBlock extends Block {
 
-    public AbstractNetBlock(Properties properties) {
+    public AbstractNodeBlock(Properties properties) {
         super(properties);
     }
 

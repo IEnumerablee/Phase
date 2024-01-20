@@ -4,7 +4,7 @@ import ru.ie.phase.foundation.net.ElectricalNetSpace;
 import ru.ie.phase.foundation.net.ICable;
 import ru.ie.phase.foundation.net.NetIndexed;
 
-public class NodeBlock extends AbstractNetBlock{
+public class NodeBlock extends AbstractNodeBlock {
     public NodeBlock(Properties properties) {
         super(properties);
     }
