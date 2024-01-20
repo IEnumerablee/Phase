@@ -4,8 +4,10 @@ import java.util.UUID;
 
 public interface NetGenerator extends NetNode{
 
-    void updateConsumerStatement(UUID consumerId, float power);
+    void updatePowerStatement();
 
     void removeConsumer(UUID consumerId);
+
+    void updateConsumer(UUID consumerId, float power);
 
 }

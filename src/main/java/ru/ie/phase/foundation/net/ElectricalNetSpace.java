@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 public class ElectricalNetSpace {
 
-    public static final HashRegistry<NetNode> nodes = new HashRegistry<>();
+    private static final HashRegistry<NetNode> nodes = new HashRegistry<>();
     private static final HashRegistry<ICable> cables = new HashRegistry<>();
 
     private static final Map<UUID, UUID> nodeJoints = new HashMap<>();
@@ -105,15 +105,34 @@ public class ElectricalNetSpace {
     public static void updatePowerStatement(UUID consumerId){
         NetConsumer consumer = (NetConsumer) nodes.get(consumerId);
         ICable cable = cables.get(nodeJoints.get(consumerId));
+
         if(cable.lossmap().isEmpty()) return;
 
         Map<UUID, Float> voltageMap = applyVoltage(cable.lossmap());
         float voltage = calculateVoltage(voltageMap);
 
-        consumer.updateVoltage(voltage);
-
         Map<UUID, Float> powerMap = getBalancedPowerMap(voltageMap, consumer.getAmperage() * voltage);
-        powerMap.forEach((uuid, aFloat) -> ((NetGenerator) nodes.get(uuid)).updateConsumerStatement(consumerId, aFloat));
+
+        powerMap.forEach((uuid, aFloat) -> {
+            NetGenerator generator = (NetGenerator) nodes.get(uuid);
+            generator.updateConsumer(consumerId, aFloat);
+        });
+
+        updateConsumerVoltage(consumer, cable);
+    }
+
+    public static void updateConsumerVoltage(UUID consumerId){
+        updateConsumerVoltage((NetConsumer) nodes.get(consumerId), cables.get(nodeJoints.get(consumerId)));
+    }
+
+    public static void updateConsumerVoltage(NetConsumer consumer, ICable cable){
+        consumer.updateVoltage(getCableVoltage(cable.getId()));
+    }
+
+    public static float getCableVoltage(UUID cableId){
+        ICable cable = cables.get(cableId);
+        Map<UUID, Float> voltageMap = applyVoltage(cable.lossmap());
+        return calculateVoltage(voltageMap);
     }
 
     private static void clearGeneratorLosses(UUID generatorId){
@@ -195,6 +214,13 @@ public class ElectricalNetSpace {
                     cable.lossmap().put(generatorId, loss);
                     activeNodes.add(s);
                     if(checked != null) checked.add(s);
+
+                    cable.nodes().forEach(uuid -> {
+                        NetNode node = nodes.get(uuid);
+                        if(node instanceof NetConsumer)
+                            updatePowerStatement(uuid);
+                    });
+
                     Phase.LOGGER.debug("%s updated loss to %f".formatted(s, loss));
                 }
             });
