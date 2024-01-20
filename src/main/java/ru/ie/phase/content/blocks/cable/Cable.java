@@ -21,7 +21,7 @@ public class Cable extends AbstractNetBlock implements EntityBlock {
 
     public Cable(Properties properties, float loss){
         super(properties);
-        this.loss =loss;
+        this.loss = loss;
     }
 
     @Nullable
