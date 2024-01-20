@@ -73,6 +73,8 @@ public class ElectricalNetSpace {
 
         cable.nodes().forEach(ElectricalNetSpace::disconnect);
 
+        if(!cable.nodes().isEmpty()) nodeJoints.remove(cable.nodes().get(0));
+
         if(cable.links().size() == 1){
             Phase.LOGGER.debug("removed ep-c %s".formatted(id));
             cables.get(cable.links().get(0)).links().remove(id);
