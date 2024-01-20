@@ -109,4 +109,8 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
         id = ElectricalNetSpace.createCable(this);
     }
 
+    @Override
+    protected void registerId() {
+        ElectricalNetSpace.addCable(id, this);
+    }
 }

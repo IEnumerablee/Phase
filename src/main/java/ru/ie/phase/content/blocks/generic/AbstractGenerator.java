@@ -1,6 +1,7 @@
 package ru.ie.phase.content.blocks.generic;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import ru.ie.phase.Phase;
@@ -93,9 +94,28 @@ public abstract class AbstractGenerator extends IndexedBlockEntity implements Ne
     }
 
     @Override
+    protected void saveAdditional(CompoundTag nbt) {
+        super.saveAdditional(nbt);
+        nbt.putFloat("drop", drop);
+        nbt.putFloat("usedpower", usedPower);
+    }
+
+    @Override
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
+        drop = nbt.getFloat("drop");
+        usedPower = nbt.getFloat("usedpower");
+    }
+
+    @Override
     protected void createId()
     {
         id = ElectricalNetSpace.createNode(this);
+    }
+
+    @Override
+    protected void registerId() {
+        ElectricalNetSpace.addNode(id, this);
     }
 
     private void refreshStatements(){
@@ -108,9 +128,4 @@ public abstract class AbstractGenerator extends IndexedBlockEntity implements Ne
             ElectricalNetSpace.updatePowerStatement(consumer);
         }
     }
-
-
-
-
-
 }

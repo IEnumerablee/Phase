@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import ru.ie.phase.Phase;
 import ru.ie.phase.Utils;
+import ru.ie.phase.foundation.net.ElectricalNetSpace;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,8 +24,11 @@ public abstract class IndexedBlockEntity extends BlockEntity {
 
     @Override
     public final void onLoad() {
-        if(this.level != null && !this.level.isClientSide && id == null) {
-            createId();
+        if(this.level != null && !this.level.isClientSide) {
+            if(id == null)
+                createId();
+            else
+                registerId();
         }
     }
 
@@ -32,14 +36,14 @@ public abstract class IndexedBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag nbt)
     {
         super.saveAdditional(nbt);
-        nbt.putUUID("cableid", id);
+        nbt.putUUID("netid", id);
     }
 
     @Override
     public void load(CompoundTag nbt)
     {
         super.load(nbt);
-        id = nbt.getUUID("cableid");
+        id = nbt.getUUID("netid");
     }
 
     public final UUID getId(){
@@ -47,5 +51,7 @@ public abstract class IndexedBlockEntity extends BlockEntity {
     }
 
     protected abstract void createId();
+
+    protected abstract void registerId();
 
 }

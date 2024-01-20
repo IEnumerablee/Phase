@@ -65,4 +65,9 @@ public abstract class AbstractConsumer extends IndexedBlockEntity implements Net
         id = ElectricalNetSpace.createNode(this);
     }
 
+    @Override
+    protected void registerId() {
+        ElectricalNetSpace.addNode(id, this);
+    }
+
 }
