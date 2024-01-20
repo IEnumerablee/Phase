@@ -46,7 +46,7 @@ public class ElectricalNetSpace {
 
         cable2.lossmap().keySet().forEach(uuid -> {
             if(cable1.lossmap().containsKey(uuid)) return;
-            remapLosses(uuid, c2);
+            partialRemapLosses(uuid, c2);
         });
 
         Phase.LOGGER.debug("c2c %s - %s".formatted(c1, c2));
