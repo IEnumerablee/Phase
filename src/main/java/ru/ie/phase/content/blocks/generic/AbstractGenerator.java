@@ -68,7 +68,7 @@ public abstract class AbstractGenerator extends IndexedBlockEntity implements Ne
     }
 
     @Override
-    public float getRealVoltage() {
+    public float getNominalVoltage() {
         return voltage.getVoltage();
     }
 

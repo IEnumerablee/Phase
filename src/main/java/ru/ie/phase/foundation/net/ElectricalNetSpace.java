@@ -108,7 +108,7 @@ public class ElectricalNetSpace {
 
         if(cable.lossmap().isEmpty()) return;
 
-        Map<UUID, Float> voltageMap = applyVoltage(cable.lossmap());
+        Map<UUID, Float> voltageMap = applyVoltage(cable.lossmap(), true);
         float voltage = calculateVoltage(voltageMap);
 
         Map<UUID, Float> powerMap = getBalancedPowerMap(cable, consumer.getAmperage() * voltage);
@@ -129,7 +129,7 @@ public class ElectricalNetSpace {
 
     public static float getCableVoltage(UUID cableId){
         ICable cable = cables.get(cableId);
-        Map<UUID, Float> voltageMap = applyVoltage(cable.lossmap());
+        Map<UUID, Float> voltageMap = applyVoltage(cable.lossmap(), false);
         return calculateVoltage(voltageMap);
     }
 
@@ -233,13 +233,18 @@ public class ElectricalNetSpace {
         cable.lossmap().put(generatorId, cable.loss());
     }
 
-    private static Map<UUID, Float> applyVoltage(Map<UUID, Float> lossmap)
+    private static Map<UUID, Float> applyVoltage(Map<UUID, Float> lossmap, boolean isNominal)
     {
         Map<UUID, Float> voltageMap = new HashMap<>();
 
         lossmap.forEach((uuid, aFloat) -> {
             NetGenerator generator = (NetGenerator) nodes.get(uuid);
-            voltageMap.put(uuid, Math.max(0, generator.getVoltage() - aFloat));
+
+            float voltage;
+            if(isNominal) voltage = generator.getNominalVoltage();
+            else voltage = generator.getVoltage();
+
+            voltageMap.put(uuid, Math.max(0, voltage - aFloat));
         });
 
         return voltageMap;
@@ -252,7 +257,7 @@ public class ElectricalNetSpace {
 
         cable.lossmap().forEach((uuid, aFloat) -> {
             NetGenerator generator = (NetGenerator) nodes.get(uuid);
-            powerMap.put(uuid, (generator.getRealVoltage() - aFloat) * generator.getAmperage());
+            powerMap.put(uuid, (generator.getNominalVoltage() - aFloat) * generator.getAmperage());
         });
 
         float absolutePower = (float) powerMap.values().stream()
