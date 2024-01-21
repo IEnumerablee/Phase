@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class DirectionalLinkHolder implements Serializable {
 
-    private HashMap<Direction, LinkEntry> links;
+    private final HashMap<Direction, LinkEntry> links = new HashMap<>();
 
     public DirectionalLinkHolder(){
         initLinks();
@@ -24,7 +24,7 @@ public class DirectionalLinkHolder implements Serializable {
         LinkEntry entry =links.values().stream()
                 .filter(linkEntry -> linkEntry.id == id)
                 .findFirst()
-                .get();
+                .orElseThrow();
         entry.linkType = LinkType.NONE;
         entry.id = null;
     }
