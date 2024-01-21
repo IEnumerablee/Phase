@@ -1,7 +1,6 @@
 package ru.ie.phase.declaration;
 
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
-import net.minecraft.world.level.material.Material;
 import ru.ie.phase.Phase;
 import ru.ie.phase.content.blocks.cable.CableEntity;
 import ru.ie.phase.content.blocks.consumer.ConsumerEntity;

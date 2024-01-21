@@ -12,7 +12,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import ru.ie.phase.content.blocks.generic.AbstractNodeBlock;
-import ru.ie.phase.foundation.net.*;
+import ru.ie.phase.foundation.net.ElectricalNetSpace;
+import ru.ie.phase.foundation.net.ICable;
+import ru.ie.phase.foundation.net.NetIndexed;
+import ru.ie.phase.foundation.net.NetNode;
 
 public class Cable extends AbstractNodeBlock implements EntityBlock {
 
