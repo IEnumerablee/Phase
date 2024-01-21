@@ -15,4 +15,6 @@ public interface ICable extends NetIndexed{
 
     float loss();
 
+    boolean isStandalone();
+
 }
