@@ -91,7 +91,8 @@ public class ElectricalNetSpace {
         cables.remove(id);
     }
 
-    public static void removeNode(UUID nodeId){
+    public static void removeNode(UUID nodeId)
+    {
         UUID cableId = nodeJoints.get(nodeId);
         Phase.LOGGER.debug("removed c %s".formatted(nodeId));
         if(cables.containsKey(cableId)){
@@ -102,7 +103,8 @@ public class ElectricalNetSpace {
         nodes.remove(nodeId);
     }
 
-    public static void updatePowerStatement(UUID consumerId){
+    public static void updatePowerStatement(UUID consumerId)
+    {
         NetConsumer consumer = (NetConsumer) nodes.get(consumerId);
         ICable cable = cables.get(nodeJoints.get(consumerId));
 
@@ -223,7 +225,6 @@ public class ElectricalNetSpace {
 
             activeNodes.remove(nearestCableId);
         }
-
     }
 
     private static void initCableLoss(UUID generatorId, UUID cableId){
