@@ -45,7 +45,7 @@ public class DirectionalLinkHolder implements Serializable {
             links.put(direction, new LinkEntry());
     }
 
-    private static class LinkEntry
+    private static class LinkEntry implements Serializable
     {
         LinkEntry(){
             linkType = LinkType.NONE;
