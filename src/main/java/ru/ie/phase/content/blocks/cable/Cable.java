@@ -33,11 +33,11 @@ public class Cable extends AbstractNodeBlock implements EntityBlock {
     }
 
     @Override
-    protected void connect(NetIndexed neighbor, NetIndexed me) {
+    protected void connect(NetIndexed neighbor, NetIndexed me, Direction dir) {
         if(neighbor instanceof ICable)
-            ElectricalNetSpace.connectCable2Cable(me.getId(), neighbor.getId());
+            ElectricalNetSpace.connectCable2Cable(me.getId(), neighbor.getId(), dir);
         else if(neighbor instanceof NetNode)
-            ElectricalNetSpace.connectCable2Node(me.getId(), neighbor.getId());
+            ElectricalNetSpace.connectCable2Node(me.getId(), neighbor.getId(), dir);
     }
 
     @Override

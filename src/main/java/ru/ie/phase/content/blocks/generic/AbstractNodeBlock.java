@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import ru.ie.phase.content.blocks.cable.Direction;
 import ru.ie.phase.foundation.net.NetIndexed;
 
 public abstract class AbstractNodeBlock extends Block {
@@ -23,19 +24,21 @@ public abstract class AbstractNodeBlock extends Block {
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos thisPpos, Block block, BlockPos neighborPos, boolean p_60514_)
+    public void neighborChanged(BlockState state, Level level, BlockPos thisPos, Block block, BlockPos neighborPos, boolean p_60514_)
     {
-        super.neighborChanged(state, level, thisPpos, block, neighborPos, p_60514_);
+        super.neighborChanged(state, level, thisPos, block, neighborPos, p_60514_);
         if(!level.isClientSide()) {
-            NetIndexed me = (NetIndexed) level.getBlockEntity(thisPpos);
+            NetIndexed me = (NetIndexed) level.getBlockEntity(thisPos);
             NetIndexed neighbor = (NetIndexed) level.getBlockEntity(neighborPos);
 
-            connect(neighbor, me);
+            Direction dir = Direction.getDir(thisPos, neighborPos);
+
+            connect(neighbor, me, dir);
         }
-        super.neighborChanged(state, level, thisPpos, block, neighborPos, p_60514_);
+        super.neighborChanged(state, level, thisPos, block, neighborPos, p_60514_);
     }
 
-    protected abstract void connect(NetIndexed neighbor, NetIndexed me);
+    protected abstract void connect(NetIndexed neighbor, NetIndexed me, Direction dir);
 
     protected abstract void remove(NetIndexed me);
 }
