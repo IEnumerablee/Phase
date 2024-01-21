@@ -111,7 +111,7 @@ public class ElectricalNetSpace {
         Map<UUID, Float> voltageMap = applyVoltage(cable.lossmap());
         float voltage = calculateVoltage(voltageMap);
 
-        Map<UUID, Float> powerMap = getBalancedPowerMap(voltageMap, consumer.getAmperage() * voltage);
+        Map<UUID, Float> powerMap = getBalancedPowerMap(cable, consumer.getAmperage() * voltage);
 
         powerMap.forEach((uuid, aFloat) -> {
             NetGenerator generator = (NetGenerator) nodes.get(uuid);
@@ -245,21 +245,23 @@ public class ElectricalNetSpace {
         return voltageMap;
     }
 
-    private static Map<UUID, Float> getBalancedPowerMap(Map<UUID, Float> voltageMap, float power)
+    private static Map<UUID, Float> getBalancedPowerMap(ICable cable, float power)
     {
         Map<UUID, Float> powerMap = new HashMap<>();
         Map<UUID, Float> ratioMap = new HashMap<>();
 
-        voltageMap.forEach((uuid, aFloat) -> {
+        cable.lossmap().forEach((uuid, aFloat) -> {
             NetGenerator generator = (NetGenerator) nodes.get(uuid);
-            powerMap.put(uuid, Math.max(0, generator.getAmperage() * aFloat));
+            powerMap.put(uuid, (generator.getRealVoltage() - aFloat) * generator.getAmperage());
         });
 
         float absolutePower = (float) powerMap.values().stream()
                 .mapToDouble(Float::doubleValue)
                 .sum();
 
-        powerMap.forEach((uuid, aFloat) -> ratioMap.put(uuid, power / absolutePower * aFloat));
+        powerMap.forEach((uuid, aFloat) -> ratioMap.put(uuid, aFloat / absolutePower * power));
+
+        ratioMap.forEach((uuid, aFloat) -> Phase.LOGGER.debug("%s - %s".formatted(aFloat, uuid)));
 
         return ratioMap;
     }
