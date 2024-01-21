@@ -58,6 +58,11 @@ public abstract class AbstractGenerator extends IndexedBlockEntity implements Ne
     }
 
     @Override
+    public void flushConsumers() {
+        consumerStatements.keySet().forEach(ElectricalNetSpace::updatePowerStatement);
+    }
+
+    @Override
     public float getAmperage() {
         return amperage;
     }

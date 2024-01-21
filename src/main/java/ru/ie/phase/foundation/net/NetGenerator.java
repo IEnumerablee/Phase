@@ -10,6 +10,8 @@ public interface NetGenerator extends NetNode{
 
     void updateConsumer(UUID consumerId, float power);
 
+    void flushConsumers();
+
     float getNominalVoltage();
 
 }

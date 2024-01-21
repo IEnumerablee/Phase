@@ -146,7 +146,6 @@ public class ElectricalNetSpace {
         UUID current = cableId;
         for(;;){
             ICable cable = cables.get(current);
-            removeConsumers(cable);
             cable.lossmap().remove(generatorId);
             checked.add(current);
 
@@ -271,15 +270,6 @@ public class ElectricalNetSpace {
         return ratioMap;
     }
 
-    private static void removeConsumers(ICable cable){
-        cable.nodes().forEach(cuuid -> {
-            if(nodes.get(cuuid) instanceof NetConsumer)
-                cable.lossmap().keySet().forEach(guuid ->
-                        ((NetGenerator) nodes.get(guuid)).removeConsumer(cuuid)
-                );
-        });
-    }
-
     private static float calculateVoltage(Map<UUID, Float> voltageMap){
         return (float) voltageMap.values().stream()
                 .mapToDouble(Float::floatValue)
@@ -292,6 +282,7 @@ public class ElectricalNetSpace {
         ICable cable = cables.get(nodeJoints.get(nodeId));
         if(node instanceof NetGenerator) {
             clearGeneratorLosses(nodeId);
+            ((NetGenerator) node).flushConsumers();
         }else {
             cable.lossmap().forEach((uuid, aFloat) ->
                     ((NetGenerator)nodes.get(uuid)).removeConsumer(nodeId)
