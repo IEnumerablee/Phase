@@ -36,8 +36,8 @@ public class ElectricalNetSpace {
         ICable cable1 = cables.get(c1);
         ICable cable2 = cables.get(c2);
 
-        cable1.createLink(c2, dir, LinkType.CABLE);
-        cable2.createLink(c1, dir.invert(), LinkType.CABLE);
+        cables.get(c1).createLink(c2, dir, LinkType.CABLE);
+        cables.get(c2).createLink(c1, dir.invert(), LinkType.CABLE);
 
         cable1.lossmap().keySet().forEach(uuid -> {
             if(cable2.lossmap().containsKey(uuid))
@@ -58,7 +58,7 @@ public class ElectricalNetSpace {
     {
         if(nodeJoints.containsKey(nodeId)) return;
 
-        cables.get(cableId).createLink(nodeId, dir.invert(), LinkType.NODE);
+        cables.get(cableId).createLink(nodeId, dir, LinkType.NODE);
         nodeJoints.put(nodeId, cableId);
 
         if(nodes.get(nodeId) instanceof NetGenerator)
