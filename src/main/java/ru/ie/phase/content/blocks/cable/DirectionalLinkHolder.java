@@ -2,6 +2,7 @@ package ru.ie.phase.content.blocks.cable;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class DirectionalLinkHolder {
@@ -26,11 +27,11 @@ public class DirectionalLinkHolder {
         return links.get(dir).linkType;
     }
 
-    public UUID[] getLinks(LinkType linkType){
-        return (UUID[]) links.values().stream()
+    public List<UUID> getLinks(LinkType linkType){
+        return links.values().stream()
                 .filter(linkEntry -> linkEntry.linkType == linkType)
                 .map(linkEntry -> linkEntry.id)
-                .toArray();
+                .toList();
     }
 
     private void initLinks(){
