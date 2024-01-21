@@ -41,7 +41,7 @@ public abstract class AbstractGenerator extends IndexedBlockEntity implements Ne
         if(usedPower > voltage.getVoltage() * amperage)
             drop = (usedPower - voltage.getVoltage() * amperage) / amperage;
 
-        consumerStatements.keySet().forEach(uuid -> ElectricalNetSpace.updateConsumerVoltage(uuid));
+        consumerStatements.keySet().forEach(ElectricalNetSpace::updateConsumerVoltage);
     }
 
     @Override

@@ -186,8 +186,7 @@ public class ElectricalNetSpace {
         HashSet<UUID> checked;
 
         if(isFull){
-            checked = new HashSet<>();
-            checked.addAll(activeNodes);
+            checked = new HashSet<>(activeNodes);
         }else{
             checked = null;
         }
