@@ -1,11 +1,12 @@
 package ru.ie.phase.content.blocks.cable;
 
 import javax.annotation.Nullable;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class DirectionalLinkHolder {
+public class DirectionalLinkHolder implements Serializable {
 
     private HashMap<Direction, LinkEntry> links;
 
