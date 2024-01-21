@@ -49,11 +49,4 @@ public class DirectionalLinkHolder implements Serializable {
         @Nullable UUID id;
         LinkType linkType;
     }
-
-    public enum LinkType
-    {
-        NODE,
-        CABLE,
-        NONE
-    }
 }
