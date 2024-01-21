@@ -100,11 +100,6 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
     }
 
     @Override
-    public boolean isStandalone() {
-        return links.isEmpty();
-    }
-
-    @Override
     protected void createId() {
         id = ElectricalNetSpace.createCable(this);
     }
