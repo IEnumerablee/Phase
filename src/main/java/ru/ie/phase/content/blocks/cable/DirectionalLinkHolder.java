@@ -50,16 +50,6 @@ public class DirectionalLinkHolder implements Serializable {
         LinkType linkType;
     }
 
-    public enum Direction
-    {
-        NORTH,
-        SOUTH,
-        WEST,
-        EAST,
-        UP,
-        DOWN
-    }
-
     public enum LinkType
     {
         NODE,
