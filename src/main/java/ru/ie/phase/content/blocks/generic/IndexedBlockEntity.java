@@ -5,13 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import ru.ie.phase.Phase;
-import ru.ie.phase.Utils;
-import ru.ie.phase.foundation.net.ElectricalNetSpace;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public abstract class IndexedBlockEntity extends BlockEntity {

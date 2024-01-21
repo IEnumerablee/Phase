@@ -55,7 +55,7 @@ public abstract class AbstractConsumer extends IndexedBlockEntity implements Net
         ElectricalNetSpace.updatePowerStatement(id);
     }
 
-    protected final float aperage(){
+    protected final float amperage(){
         return amperage;
     }
 

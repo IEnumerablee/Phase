@@ -4,12 +4,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import ru.ie.phase.Phase;
 import ru.ie.phase.foundation.net.ElectricalNetSpace;
 import ru.ie.phase.foundation.net.NetGenerator;
 import ru.ie.phase.foundation.net.VoltageLevel;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public abstract class AbstractGenerator extends IndexedBlockEntity implements NetGenerator {
 
@@ -17,8 +18,6 @@ public abstract class AbstractGenerator extends IndexedBlockEntity implements Ne
     private float drop = 0;
     private VoltageLevel voltage;
     private float usedPower = 0;
-
-    private int updateCounter = 0;
 
     protected final Map<UUID, Float> consumerStatements = new HashMap<>();
 
@@ -31,40 +30,35 @@ public abstract class AbstractGenerator extends IndexedBlockEntity implements Ne
         this.voltage = voltage;
     }
 
-
     @Override
-    public void updateConsumerStatement(UUID nodeId, float power)
+    public void updatePowerStatement()
     {
-        consumerStatements.put(nodeId, power);
+        drop = 0;
+        usedPower = 0;
 
-        float absolutePower = 0;
-        for(float p : consumerStatements.values()){
-            Phase.LOGGER.debug("%s".formatted(p));
-            absolutePower += p;
-        }
+        for(float p : consumerStatements.values()) usedPower += p;
 
-        usedPower = absolutePower;
+        if(usedPower > voltage.getVoltage() * amperage)
+            drop = (usedPower - voltage.getVoltage() * amperage) / amperage;
 
-        Phase.LOGGER.debug("upd g p - %s".formatted(usedPower));
-        Phase.LOGGER.debug("uc - %s".formatted(updateCounter));
-        if(absolutePower < voltage.getVoltage() * amperage || updateCounter != 0) return;
-
-        drop = (absolutePower - voltage.getVoltage() * amperage) / amperage;
-
-        refreshStatements();
-
-        Phase.LOGGER.debug("drop g p - %s".formatted(drop));
+        consumerStatements.keySet().forEach(ElectricalNetSpace::updateConsumerVoltage);
     }
 
     @Override
     public void removeConsumer(UUID consumerId) {
         consumerStatements.remove(consumerId);
+        updatePowerStatement();
+    }
 
-        drop = 0;
-        if(consumerStatements.isEmpty())
-            usedPower = 0;
-        else
-            refreshStatements();
+    @Override
+    public void updateConsumer(UUID consumerId, float power) {
+        consumerStatements.put(consumerId, power);
+        updatePowerStatement();
+    }
+
+    @Override
+    public void flushConsumers() {
+        consumerStatements.keySet().forEach(ElectricalNetSpace::updatePowerStatement);
     }
 
     @Override
@@ -75,6 +69,11 @@ public abstract class AbstractGenerator extends IndexedBlockEntity implements Ne
     @Override
     public float getVoltage() {
         return voltage.getVoltage() - drop;
+    }
+
+    @Override
+    public float getNominalVoltage() {
+        return voltage.getVoltage();
     }
 
     protected final VoltageLevel voltage(){
@@ -116,16 +115,5 @@ public abstract class AbstractGenerator extends IndexedBlockEntity implements Ne
     @Override
     protected void registerId() {
         ElectricalNetSpace.addNode(id, this);
-    }
-
-    private void refreshStatements(){
-        Set<UUID> consumers = new HashSet<>(consumerStatements.keySet());
-        consumerStatements.clear();
-        updateCounter = consumers.size();
-
-        for(UUID consumer: consumers){
-            updateCounter--;
-            ElectricalNetSpace.updatePowerStatement(consumer);
-        }
     }
 }
