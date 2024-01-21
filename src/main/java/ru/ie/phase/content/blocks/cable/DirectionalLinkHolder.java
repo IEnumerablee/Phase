@@ -1,5 +1,7 @@
 package ru.ie.phase.content.blocks.cable;
 
+import ru.ie.phase.Phase;
+
 import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -15,6 +17,7 @@ public class DirectionalLinkHolder implements Serializable {
     }
 
     public void changeLink(Direction dir, LinkType linkType, @Nullable UUID id){
+        Phase.LOGGER.debug("d - %s lt - %s ID: %s".formatted(dir, linkType, id));
         LinkEntry entry = links.get(dir);
         entry.linkType = linkType;
         entry.id = id;
