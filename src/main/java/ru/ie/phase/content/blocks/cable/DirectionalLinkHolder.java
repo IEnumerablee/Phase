@@ -20,8 +20,13 @@ public class DirectionalLinkHolder implements Serializable {
         entry.id = id;
     }
 
-    public void disconnect(Direction dir){
-        changeLink(dir, LinkType.NONE, null);
+    public void disconnect(UUID id){
+        LinkEntry entry =links.values().stream()
+                .filter(linkEntry -> linkEntry.id == id)
+                .findFirst()
+                .get();
+        entry.linkType = LinkType.NONE;
+        entry.id = null;
     }
 
     public LinkType getLinkType(Direction dir){
