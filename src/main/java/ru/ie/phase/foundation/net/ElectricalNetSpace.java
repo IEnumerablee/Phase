@@ -265,8 +265,6 @@ public class ElectricalNetSpace {
 
         powerMap.forEach((uuid, aFloat) -> ratioMap.put(uuid, aFloat / absolutePower * power));
 
-        ratioMap.forEach((uuid, aFloat) -> Phase.LOGGER.debug("%s - %s".formatted(aFloat, uuid)));
-
         return ratioMap;
     }
 

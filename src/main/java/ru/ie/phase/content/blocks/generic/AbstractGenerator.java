@@ -4,12 +4,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import ru.ie.phase.Phase;
 import ru.ie.phase.foundation.net.ElectricalNetSpace;
 import ru.ie.phase.foundation.net.NetGenerator;
 import ru.ie.phase.foundation.net.VoltageLevel;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public abstract class AbstractGenerator extends IndexedBlockEntity implements NetGenerator {
 
@@ -17,8 +18,6 @@ public abstract class AbstractGenerator extends IndexedBlockEntity implements Ne
     private float drop = 0;
     private VoltageLevel voltage;
     private float usedPower = 0;
-
-    private int updateCounter = 0;
 
     protected final Map<UUID, Float> consumerStatements = new HashMap<>();
 
