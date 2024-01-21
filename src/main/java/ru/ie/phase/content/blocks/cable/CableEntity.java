@@ -18,8 +18,8 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
 
     private float loss;
     private Map<UUID, Float> lossmap = new HashMap<>();
-    private List<UUID> links = new ArrayList<>();
-    private List<UUID> nodes = new ArrayList<>();
+
+    private DirectionalLinkHolder linkHolder = new DirectionalLinkHolder();
 
     public CableEntity(BlockEntityType<CableEntity> blockEntityType, BlockPos pos, BlockState state) {
         super(blockEntityType, pos, state);
@@ -32,9 +32,13 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
     }
 
     @Override
-    public void createLink(UUID id){
-        if(!links.contains(id))
-            links.add(id);
+    public void createLink(UUID id, Direction dir, LinkType linkType){
+        linkHolder.changeLink(dir, linkType, id);
+    }
+
+    @Override
+    public void removeLink(UUID id) {
+        linkHolder.disconnect(id);
     }
 
     @Override
@@ -47,7 +51,7 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
 
         try {
 
-            netdata = Utils.writeToByteArray(lossmap, links, nodes);
+            netdata = Utils.writeToByteArray(lossmap, linkHolder);
             nbt.putByteArray("netdata", netdata);
 
         } catch (IOException e) {
@@ -69,8 +73,7 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
             Object[] netdata = Utils.readByteArray(byteNetdata);
 
             lossmap = (Map<UUID, Float>) netdata[0];
-            links = (List<UUID>) netdata[1];
-            nodes = (List<UUID>) netdata[2];
+            linkHolder = (DirectionalLinkHolder) netdata[1];
 
         } catch (IOException | ClassNotFoundException | IndexOutOfBoundsException | ClassCastException e) {
             BlockPos pos = getBlockPos();
@@ -86,12 +89,12 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
 
     @Override
     public List<UUID> nodes() {
-        return nodes;
+        return linkHolder.getLinks(LinkType.NODE);
     }
 
     @Override
     public List<UUID> links() {
-        return links;
+        return linkHolder.getLinks(LinkType.CABLE);
     }
 
     @Override

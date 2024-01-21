@@ -1,12 +1,17 @@
 package ru.ie.phase.foundation.net;
 
+import ru.ie.phase.content.blocks.cable.Direction;
+import ru.ie.phase.content.blocks.cable.LinkType;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public interface ICable extends NetIndexed{
 
-    void createLink(UUID id);
+    void createLink(UUID id, Direction dir, LinkType linkType);
+
+    void removeLink(UUID id);
 
     Map<UUID, Float> lossmap();
     List<UUID> nodes();

@@ -1,6 +1,8 @@
 package ru.ie.phase.foundation.net;
 
 import ru.ie.phase.Phase;
+import ru.ie.phase.content.blocks.cable.Direction;
+import ru.ie.phase.content.blocks.cable.LinkType;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -29,13 +31,13 @@ public class ElectricalNetSpace {
         nodes.put(id, node);
     }
 
-    public static void connectCable2Cable(UUID c1, UUID c2)
+    public static void connectCable2Cable(UUID c1, UUID c2, Direction dir)
     {
         ICable cable1 = cables.get(c1);
         ICable cable2 = cables.get(c2);
 
-        cables.get(c1).createLink(c2);
-        cables.get(c2).createLink(c1);
+        cables.get(c1).createLink(c2, dir, LinkType.CABLE);
+        cables.get(c2).createLink(c1, dir.invert(), LinkType.CABLE);
 
         cable1.lossmap().keySet().forEach(uuid -> {
             if(cable2.lossmap().containsKey(uuid))
@@ -52,11 +54,11 @@ public class ElectricalNetSpace {
         Phase.LOGGER.debug("c2c %s - %s".formatted(c1, c2));
     }
 
-    public static void connectCable2Node(UUID cableId, UUID nodeId)
+    public static void connectCable2Node(UUID cableId, UUID nodeId, Direction dir)
     {
         if(nodeJoints.containsKey(nodeId)) return;
 
-        cables.get(cableId).nodes().add(nodeId);
+        cables.get(cableId).createLink(nodeId, dir, LinkType.NODE);
         nodeJoints.put(nodeId, cableId);
 
         if(nodes.get(nodeId) instanceof NetGenerator)
@@ -77,14 +79,14 @@ public class ElectricalNetSpace {
 
         if(cable.links().size() == 1){
             Phase.LOGGER.debug("removed ep-c %s".formatted(id));
-            cables.get(cable.links().get(0)).links().remove(id);
+            cables.get(cable.links().get(0)).removeLink(id);
         }else {
             Phase.LOGGER.debug("removed c %s".formatted(id));
 
             Set<UUID> generators = new HashSet<>(cable.lossmap().keySet());
 
             generators.forEach(ElectricalNetSpace::clearGeneratorLosses);
-            cable.links().forEach(s -> cables.get(s).links().remove(id));
+            cable.links().forEach(s -> cables.get(s).removeLink(id));
             generators.forEach(ElectricalNetSpace::remapLosses);
         }
 
@@ -96,7 +98,7 @@ public class ElectricalNetSpace {
         UUID cableId = nodeJoints.get(nodeId);
         Phase.LOGGER.debug("removed c %s".formatted(nodeId));
         if(cables.containsKey(cableId)){
-            cables.get(cableId).nodes().remove(nodeId);
+            cables.get(cableId).removeLink(nodeId);
             disconnect(nodeId);
             nodeJoints.remove(nodeId);
         }
@@ -186,6 +188,7 @@ public class ElectricalNetSpace {
         Phase.LOGGER.debug("remapping...");
 
         HashSet<UUID> checked;
+        List<UUID> consumers = new ArrayList<>();
 
         if(isFull){
             checked = new HashSet<>(activeNodes);
@@ -216,15 +219,15 @@ public class ElectricalNetSpace {
                     cable.nodes().forEach(uuid -> {
                         NetNode node = nodes.get(uuid);
                         if(node instanceof NetConsumer)
-                            updatePowerStatement(uuid);
+                            consumers.add(uuid);
                     });
 
                     Phase.LOGGER.debug("%s updated loss to %f".formatted(s, loss));
                 }
             });
-
             activeNodes.remove(nearestCableId);
         }
+        consumers.forEach(ElectricalNetSpace::updatePowerStatement);
     }
 
     private static void initCableLoss(UUID generatorId, UUID cableId){
@@ -242,7 +245,6 @@ public class ElectricalNetSpace {
             float voltage;
             if(isNominal) voltage = generator.getNominalVoltage();
             else voltage = generator.getVoltage();
-
             voltageMap.put(uuid, Math.max(0, voltage - aFloat));
         });
 
