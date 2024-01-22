@@ -13,7 +13,7 @@ public class NodeBlock extends AbstractNodeBlock {
     @Override
     protected final void connect(NetIndexed neighbor, NetIndexed me, Direction dir) {
         if(neighbor instanceof ICable)
-            ElectricalNetSpace.connectCable2Node(neighbor.getId(), me.getId(), dir);
+            ElectricalNetSpace.connectCable2Node(neighbor.getId(), me.getId(), dir.invert());
     }
 
     @Override
