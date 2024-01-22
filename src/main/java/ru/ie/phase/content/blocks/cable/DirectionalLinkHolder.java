@@ -24,8 +24,9 @@ public class DirectionalLinkHolder implements Serializable {
     }
 
     public void disconnect(UUID id){
-        LinkEntry entry =links.values().stream()
-                .filter(linkEntry -> linkEntry.id == id)
+        LinkEntry entry = links.values().stream()
+                .filter(linkEntry -> linkEntry.id != null)
+                .filter(linkEntry -> linkEntry.id.equals(id))
                 .findFirst()
                 .orElseThrow();
         entry.linkType = LinkType.NONE;
