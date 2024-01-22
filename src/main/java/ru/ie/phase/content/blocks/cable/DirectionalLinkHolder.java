@@ -16,14 +16,16 @@ public class DirectionalLinkHolder implements Serializable {
         initLinks();
     }
 
-    public void changeLink(Direction dir, LinkType linkType, @Nullable UUID id){
+    public void changeLink(Direction dir, LinkType linkType, @Nullable UUID id)
+    {
         Phase.LOGGER.debug("d - %s lt - %s ID: %s".formatted(dir, linkType, id));
         LinkEntry entry = links.get(dir);
         entry.linkType = linkType;
         entry.id = id;
     }
 
-    public void disconnect(UUID id){
+    public void disconnect(UUID id)
+    {
         LinkEntry entry = links.values().stream()
                 .filter(linkEntry -> linkEntry.id != null)
                 .filter(linkEntry -> linkEntry.id.equals(id))
@@ -37,7 +39,8 @@ public class DirectionalLinkHolder implements Serializable {
         return links.get(dir).linkType;
     }
 
-    public List<UUID> getLinks(LinkType linkType){
+    public List<UUID> getLinks(LinkType linkType)
+    {
         return links.values().stream()
                 .filter(linkEntry -> linkEntry.linkType == linkType)
                 .map(linkEntry -> linkEntry.id)
