@@ -22,7 +22,7 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
     private float loss;
     private Map<UUID, Float> lossmap = new HashMap<>();
 
-    private DirectionalLinkHolder linkHolder = new DirectionalLinkHolder();
+    private DirectionalLinkHolder linkHolder;
 
     public CableEntity(BlockEntityType<CableEntity> blockEntityType, BlockPos pos, BlockState state) {
         super(blockEntityType, pos, state);
@@ -31,6 +31,7 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
     public static CableEntity create(BlockPos pos, BlockState state, float loss){
         CableEntity entity = new CableEntity(BlockEntities.CABLE_ENTITY.get(), pos, state);
         entity.loss = loss;
+        entity.linkHolder = new DirectionalLinkHolder();
         return entity;
     }
 
