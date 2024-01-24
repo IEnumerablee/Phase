@@ -4,6 +4,7 @@ import ru.ie.phase.Phase;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -35,8 +36,13 @@ public class DirectionalLinkHolder implements Serializable {
         entry.id = null;
     }
 
-    public LinkType getLinkType(ConnectDirection dir){
-        return links.get(dir).linkType;
+    public ConnectDirection getDirection(UUID id)
+    {
+        for(ConnectDirection dir : ConnectDirection.values()){
+            LinkEntry entry = links.get(dir);
+            if(entry.id != null && entry.id.equals(id)) return dir;
+        }
+        throw new IllegalStateException("Connections not initialized");
     }
 
     public List<UUID> getLinks(LinkType linkType)
