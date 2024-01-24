@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import ru.ie.phase.foundation.net.ICable;
 import ru.ie.phase.foundation.net.NetNode;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.function.BiPredicate;
 
@@ -23,12 +24,16 @@ public enum NeighborType implements StringRepresentable {
         this.checker = checker;
     }
 
-    public boolean check(Block block, BlockEntity blockEntity){
-        return checker.test(block, blockEntity);
-    }
-
     @Override
     public String getSerializedName() {
         return name().toLowerCase(Locale.ENGLISH);
     }
+
+    public NeighborType getType(Block block, BlockEntity entity){
+        return Arrays.stream(values())
+                .filter(neighborType -> neighborType.checker.test(block, entity))
+                .findFirst()
+                .orElse(NONE);
+    }
+
 }
