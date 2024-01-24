@@ -1,6 +1,6 @@
 package ru.ie.phase.foundation.net;
 
-import ru.ie.phase.content.blocks.cable.Direction;
+import ru.ie.phase.content.blocks.cable.ConnectDirection;
 import ru.ie.phase.content.blocks.cable.LinkType;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface ICable extends NetIndexed{
 
-    void createLink(UUID id, Direction dir, LinkType linkType);
+    void createLink(UUID id, ConnectDirection dir, LinkType linkType);
 
     void removeLink(UUID id);
 

@@ -5,7 +5,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import ru.ie.phase.content.blocks.cable.Direction;
+import ru.ie.phase.content.blocks.cable.ConnectDirection;
 import ru.ie.phase.foundation.net.NetIndexed;
 
 public abstract class AbstractNodeBlock extends Block {
@@ -34,13 +34,13 @@ public abstract class AbstractNodeBlock extends Block {
             BlockEntity neighbor = level.getBlockEntity(neighborPos);
 
             if(me instanceof NetIndexed && neighbor instanceof NetIndexed) {
-                Direction dir = Direction.getDir(thisPos, neighborPos);
+                ConnectDirection dir = ConnectDirection.getDir(thisPos, neighborPos);
                 connect((NetIndexed) neighbor, (NetIndexed) me, dir);
             }
         }
     }
 
-    protected abstract void connect(NetIndexed neighbor, NetIndexed me, Direction dir);
+    protected abstract void connect(NetIndexed neighbor, NetIndexed me, ConnectDirection dir);
 
     protected abstract void remove(NetIndexed me);
 }

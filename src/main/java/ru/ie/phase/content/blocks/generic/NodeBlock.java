@@ -1,6 +1,6 @@
 package ru.ie.phase.content.blocks.generic;
 
-import ru.ie.phase.content.blocks.cable.Direction;
+import ru.ie.phase.content.blocks.cable.ConnectDirection;
 import ru.ie.phase.foundation.net.ElectricalNetSpace;
 import ru.ie.phase.foundation.net.ICable;
 import ru.ie.phase.foundation.net.NetIndexed;
@@ -11,7 +11,7 @@ public class NodeBlock extends AbstractNodeBlock {
     }
 
     @Override
-    protected final void connect(NetIndexed neighbor, NetIndexed me, Direction dir) {
+    protected final void connect(NetIndexed neighbor, NetIndexed me, ConnectDirection dir) {
         if(neighbor instanceof ICable)
             ElectricalNetSpace.connectCable2Node(neighbor.getId(), me.getId(), dir.invert());
     }

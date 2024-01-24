@@ -36,7 +36,7 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
     }
 
     @Override
-    public void createLink(UUID id, Direction dir, LinkType linkType){
+    public void createLink(UUID id, ConnectDirection dir, LinkType linkType){
         linkHolder.changeLink(dir, linkType, id);
     }
 

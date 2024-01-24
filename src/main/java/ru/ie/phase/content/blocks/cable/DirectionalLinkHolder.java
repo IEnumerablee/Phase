@@ -10,13 +10,13 @@ import java.util.UUID;
 
 public class DirectionalLinkHolder implements Serializable {
 
-    private final HashMap<Direction, LinkEntry> links = new HashMap<>();
+    private final HashMap<ConnectDirection, LinkEntry> links = new HashMap<>();
 
     public DirectionalLinkHolder(){
         initLinks();
     }
 
-    public void changeLink(Direction dir, LinkType linkType, @Nullable UUID id)
+    public void changeLink(ConnectDirection dir, LinkType linkType, @Nullable UUID id)
     {
         Phase.LOGGER.debug("d - %s lt - %s ID: %s".formatted(dir, linkType, id));
         LinkEntry entry = links.get(dir);
@@ -35,7 +35,7 @@ public class DirectionalLinkHolder implements Serializable {
         entry.id = null;
     }
 
-    public LinkType getLinkType(Direction dir){
+    public LinkType getLinkType(ConnectDirection dir){
         return links.get(dir).linkType;
     }
 
@@ -48,7 +48,7 @@ public class DirectionalLinkHolder implements Serializable {
     }
 
     private void initLinks(){
-        for(Direction direction : Direction.values())
+        for(ConnectDirection direction : ConnectDirection.values())
             links.put(direction, new LinkEntry());
     }
 

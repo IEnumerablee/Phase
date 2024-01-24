@@ -1,7 +1,7 @@
 package ru.ie.phase.foundation.net;
 
 import ru.ie.phase.Phase;
-import ru.ie.phase.content.blocks.cable.Direction;
+import ru.ie.phase.content.blocks.cable.ConnectDirection;
 import ru.ie.phase.content.blocks.cable.LinkType;
 
 import java.util.*;
@@ -31,7 +31,7 @@ public class ElectricalNetSpace {
         nodes.put(id, node);
     }
 
-    public static void connectCable2Cable(UUID c1, UUID c2, Direction dir)
+    public static void connectCable2Cable(UUID c1, UUID c2, ConnectDirection dir)
     {
         ICable cable1 = cables.get(c1);
         ICable cable2 = cables.get(c2);
@@ -54,7 +54,7 @@ public class ElectricalNetSpace {
         Phase.LOGGER.debug("c2c %s - %s".formatted(c1, c2));
     }
 
-    public static void connectCable2Node(UUID cableId, UUID nodeId, Direction dir)
+    public static void connectCable2Node(UUID cableId, UUID nodeId, ConnectDirection dir)
     {
         if(nodeJoints.containsKey(nodeId)) return;
 
