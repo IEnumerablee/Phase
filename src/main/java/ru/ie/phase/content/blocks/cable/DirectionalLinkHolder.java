@@ -35,8 +35,11 @@ public class DirectionalLinkHolder implements Serializable {
         entry.id = null;
     }
 
-    public LinkType getLinkType(ConnectDirection dir){
-        return links.get(dir).linkType;
+    public LinkType getLinkType(UUID id){
+        return links.values().stream()
+                .filter(linkEntry -> linkEntry.id.equals(id))
+                .findFirst()
+                .orElseThrow().linkType;
     }
 
     public List<UUID> getLinks(LinkType linkType)
