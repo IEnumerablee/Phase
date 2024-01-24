@@ -29,7 +29,7 @@ public enum NeighborType implements StringRepresentable {
         return name().toLowerCase(Locale.ENGLISH);
     }
 
-    public NeighborType getType(Block block, BlockEntity entity){
+    public static NeighborType getType(Block block, BlockEntity entity){
         return Arrays.stream(values())
                 .filter(neighborType -> neighborType.checker.test(block, entity))
                 .findFirst()
