@@ -86,6 +86,10 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
         }
     }
 
+    public ConnectDirection getDir(UUID id){
+        return linkHolder.getDirection(id);
+    }
+
     @Override
     public Map<UUID, Float> lossmap() {
         return lossmap;

@@ -48,12 +48,11 @@ public class CableDynamicModel implements IDynamicBakedModel {
         List<BakedQuad> quads = new ArrayList<>();
 
         Material material = ForgeHooksClient.getBlockMaterial(Blocks.STONE.getRegistryName());
-
         TextureAtlasSprite textureSide = spriteGetter.apply(material);
 
-        quads.add(createQuad(v(-1, -1, -1), v(1, -1, -1), v(1, 1, -1), v(1, 1, 1), modelState.getRotation(), textureSide));
 
-        Phase.LOGGER.debug("1488");
+        quads.add(createQuad(v(-1, -1, -1), v(1, -1, -1), v(1, 1, -1), v(1, 1, 1), modelState.getRotation(), textureSide));
+        
 
         return quads;
     }
