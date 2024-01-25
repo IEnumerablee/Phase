@@ -9,6 +9,9 @@ import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Utils3d {
 
     private static void putVertex(BakedQuadBuilder builder, Vector3f normal, Vector4f vector, float u, float v, TextureAtlasSprite sprite)
@@ -63,6 +66,62 @@ public class Utils3d {
         putVertex(builder, normal, vv3, tw, th, sprite);
         putVertex(builder, normal, vv4, tw, 0, sprite);
         return builder.build();
+    }
+
+    public static List<BakedQuad> createCube(Vector3f position, Vector3f size,
+                                             Transformation rotation, TextureAtlasSprite sprite)
+    {
+        return createCube(position, size.y(), size.x(), size.z(), rotation, sprite);
+    }
+
+    public static List<BakedQuad> createCube(Vector3f position, float height, float weight, float length,
+                                             Transformation rotation, TextureAtlasSprite sprite)
+    {
+        List<BakedQuad> quads = new ArrayList<>();
+
+        quads.add(createQuad(
+                v(position.x(), position.y() + height, position.z()),
+                v(position.x() + weight, position.y() + height, position.z()),
+                v(position.x() + weight, position.y(), position.z()),
+                v(position.x(), position.y(), position.z()),
+                rotation, sprite));
+
+        quads.add(createQuad(
+                v(position.x(), position.y(), position.z() + length),
+                v(position.x() + weight, position.y(), position.z() + length),
+                v(position.x() + weight, position.y() + height, position.z() + length),
+                v(position.x(), position.y() + height, position.z() + length),
+                rotation, sprite));
+
+        quads.add(createQuad(
+                v(position.x(), position.y(), position.z()),
+                v(position.x() + weight, position.y(), position.z()),
+                v(position.x() + weight, position.y() , position.z() + length),
+                v(position.x(), position.y(), position.z() + length),
+                rotation, sprite));
+
+        quads.add(createQuad(
+                v(position.x(), position.y() + height, position.z() + length),
+                v(position.x() + weight, position.y() + height, position.z() + length),
+                v(position.x() + weight, position.y() + height, position.z()),
+                v(position.x(), position.y() + height, position.z()),
+                rotation, sprite));
+
+        quads.add(createQuad(
+                v(position.x(), position.y(), position.z()),
+                v(position.x(), position.y(), position.z() + length),
+                v(position.x(), position.y() + height, position.z() + length),
+                v(position.x(), position.y() + height, position.z()),
+                rotation, sprite));
+
+        quads.add(createQuad(
+                v(position.x() + weight, position.y() + height, position.z()),
+                v(position.x() + weight, position.y() + height, position.z() + length),
+                v(position.x() + weight, position.y(), position.z() + length),
+                v(position.x() + weight, position.y(), position.z()),
+                rotation.inverse(), sprite));
+
+        return quads;
     }
 
     public static Vector3f v(float x, float y, float z) {

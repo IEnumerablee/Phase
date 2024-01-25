@@ -1,5 +1,6 @@
 package ru.ie.phase.content.blocks.cable;
 
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -17,6 +18,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,10 +32,16 @@ import ru.ie.phase.foundation.net.NetIndexed;
 import ru.ie.phase.foundation.net.NetNode;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Cable extends AbstractNodeBlock implements EntityBlock {
 
     private final float loss;
+
+    private CableShapeProvider.Mapper<VoxelShape> shapeMapper;
 
     public static final EnumProperty<NeighborType> NORTH = EnumProperty.create("north", NeighborType.class);
     public static final EnumProperty<NeighborType> SOUTH = EnumProperty.create("south", NeighborType.class);
@@ -39,17 +50,15 @@ public class Cable extends AbstractNodeBlock implements EntityBlock {
     public static final EnumProperty<NeighborType> UP = EnumProperty.create("up", NeighborType.class);
     public static final EnumProperty<NeighborType> DOWN = EnumProperty.create("down", NeighborType.class);
 
-    private boolean isChangingState = false;
-
-
     public Cable(Properties properties, float loss){
         super(properties);
         this.loss = loss;
+        initMapper();
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return CableEntity.create(pos, state, loss);
     }
 
@@ -78,10 +87,16 @@ public class Cable extends AbstractNodeBlock implements EntityBlock {
         return result;
     }
 
+    @Nonnull
     @Override
-    public @NotNull BlockState updateShape(@NotNull BlockState state, @Nonnull Direction direction, @Nonnull BlockState neighbourState,
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter p_60556_, @NotNull BlockPos p_60557_, @NotNull CollisionContext p_60558_) {
+        return createShape(state);
+    }
+
+    @Nonnull
+    @Override
+    public BlockState updateShape(@NotNull BlockState state, @Nonnull Direction direction, @Nonnull BlockState neighbourState,
                                            @Nonnull LevelAccessor level, @Nonnull BlockPos current, @Nonnull BlockPos offset) {
-        isChangingState = true;
         return createState(level, current, state);
     }
 
@@ -140,4 +155,38 @@ public class Cable extends AbstractNodeBlock implements EntityBlock {
                 .setValue(DOWN, down);
     }
 
+    private VoxelShape combine(List<VoxelShape> shapes){
+        VoxelShape mainShape = null;
+
+        for(VoxelShape shape : shapes){
+            if(mainShape == null){
+                mainShape = shape;
+                continue;
+            }
+
+            mainShape = Shapes.join(mainShape, shape, BooleanOp.OR);
+        }
+
+        return mainShape;
+    }
+
+    private VoxelShape createShape(BlockState state){
+        Map<Direction, NeighborType> sidesMap = new HashMap<>();
+
+        sidesMap.put(Direction.NORTH, state.getValue(Cable.NORTH));
+        sidesMap.put(Direction.SOUTH, state.getValue(Cable.SOUTH));
+        sidesMap.put(Direction.WEST, state.getValue(Cable.WEST));
+        sidesMap.put(Direction.EAST, state.getValue(Cable.EAST));
+        sidesMap.put(Direction.UP, state.getValue(Cable.UP));
+        sidesMap.put(Direction.DOWN, state.getValue(Cable.DOWN));
+
+        List<VoxelShape> shapes = new ArrayList<>(shapeMapper.get(sidesMap));
+        return combine(shapes);
+    }
+
+    private void initMapper(){
+        shapeMapper = new CableShapeProvider.Mapper<>((pos, size) ->
+            Shapes.box(pos.x(), pos.y(), pos.z(), pos.x() + size.x(), pos.y() + size.y(), pos.z() + size.z())
+        );
+    }
 }
