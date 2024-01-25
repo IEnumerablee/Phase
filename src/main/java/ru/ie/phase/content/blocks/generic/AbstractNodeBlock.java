@@ -14,10 +14,12 @@ public abstract class AbstractNodeBlock extends Block {
         super(properties);
     }
 
+
+
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState state2, boolean p_60519_)
     {
-        if(!level.isClientSide()) {
+        if(!level.isClientSide() && state2.isAir()) {
             NetIndexed me = (NetIndexed) level.getBlockEntity(pos);
             remove(me);
         }
