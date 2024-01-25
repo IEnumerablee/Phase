@@ -42,7 +42,7 @@ public class DirectionalLinkHolder implements Serializable {
             LinkEntry entry = links.get(dir);
             if(entry.id != null && entry.id.equals(id)) return dir;
         }
-        throw new IllegalStateException("Connections not initialized");
+        throw new IllegalArgumentException("id not found");
     }
 
     public List<UUID> getLinks(LinkType linkType)
