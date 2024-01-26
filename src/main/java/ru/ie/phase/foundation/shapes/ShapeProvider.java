@@ -88,12 +88,15 @@ public abstract class ShapeProvider {
 
     public final static class Cube
     {
+        private final String meta;
+
         private final Vector3f pos;
         private final Vector3f size;
 
-        public Cube(Vector3f pos, Vector3f size){
+        public Cube(Vector3f pos, Vector3f size, String meta){
             this.pos = pos;
             this.size = size;
+            this.meta = meta;
         }
 
         public Vector3f pos(){
@@ -102,6 +105,10 @@ public abstract class ShapeProvider {
 
         public Vector3f size(){
             return size;
+        }
+
+        public String meta(){
+            return meta;
         }
 
         private void fix(){
@@ -120,7 +127,7 @@ public abstract class ShapeProvider {
         }
 
         private Cube copy(){
-            return new Cube(pos.copy(), size.copy());
+            return new Cube(pos.copy(), size.copy(), meta);
         }
     }
 

@@ -130,10 +130,13 @@ public class CableDynamicModel implements IDynamicBakedModel {
         shapeMapper = new ShapeMapper<>(ShapeProvidersRegistry.get("cable"), (cube, context) -> {
 
             if(context.isBase()) {
-                return createCube(cube.pos(), cube.size(), modelState.getRotation(), BASE, BASE, false);
+                return createCube(cube.pos(), cube.size(), modelState.getRotation(), END, END, false);
             }else {
 
-                if(context.neighborType() == NeighborType.NODE)
+                if(cube.meta().equals("hider"))
+                    return createCube(cube.pos(), cube.size(), modelState.getRotation(), BASE, BASE,false);
+
+                if(cube.meta().equals("connector"))
                     return createCube(cube.pos(), cube.size(), modelState.getRotation(), CONNECTOR, CONNECTOR, false);
 
                 boolean swapUv = false;
