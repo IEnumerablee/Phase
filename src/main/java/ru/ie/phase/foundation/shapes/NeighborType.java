@@ -1,4 +1,4 @@
-package ru.ie.phase.content.blocks.cable;
+package ru.ie.phase.foundation.shapes;
 
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;

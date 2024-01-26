@@ -15,11 +15,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ie.phase.Phase;
+import ru.ie.phase.foundation.shapes.ShapeMapper;
+import ru.ie.phase.foundation.shapes.ShapeProvider;
+import ru.ie.phase.foundation.shapes.NeighborType;
+import ru.ie.phase.foundation.shapes.ShapeProvidersRegistry;
 
 import java.util.*;
 import java.util.function.Function;
@@ -33,7 +35,7 @@ public class CableDynamicModel implements IDynamicBakedModel {
     private final ItemOverrides overrides;
     private final ItemTransforms itemTransforms;
 
-    private CableShapeProvider.Mapper<List<BakedQuad>> shapeMapper;
+    private ShapeMapper<List<BakedQuad>> shapeMapper;
 
     private TextureAtlasSprite SIDE;
     private TextureAtlasSprite END;
@@ -122,7 +124,7 @@ public class CableDynamicModel implements IDynamicBakedModel {
 
     private void initMapper(){
 
-        shapeMapper = new CableShapeProvider.Mapper<>((cube, context) -> {
+        shapeMapper = new ShapeMapper<>(ShapeProvidersRegistry.get("cable"), (cube, context) -> {
 
             if(context.isBase()) {
                 return createCube(cube.pos(), cube.size(), modelState.getRotation(), BASE, BASE, false);

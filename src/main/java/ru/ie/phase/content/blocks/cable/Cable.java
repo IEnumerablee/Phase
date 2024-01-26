@@ -1,7 +1,6 @@
 package ru.ie.phase.content.blocks.cable;
 
 import com.mojang.math.Vector3f;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -23,14 +22,17 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ie.phase.content.blocks.generic.AbstractNodeBlock;
+import ru.ie.phase.foundation.shapes.ShapeMapper;
+import ru.ie.phase.foundation.shapes.ShapeProvider;
+import ru.ie.phase.foundation.shapes.NeighborType;
 import ru.ie.phase.foundation.net.ElectricalNetSpace;
 import ru.ie.phase.foundation.net.ICable;
 import ru.ie.phase.foundation.net.NetIndexed;
 import ru.ie.phase.foundation.net.NetNode;
+import ru.ie.phase.foundation.shapes.ShapeProvidersRegistry;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class Cable extends AbstractNodeBlock implements EntityBlock {
 
     private final float loss;
 
-    private CableShapeProvider.Mapper<VoxelShape> shapeMapper;
+    private ShapeMapper<VoxelShape> shapeMapper;
 
     public static final EnumProperty<NeighborType> NORTH = EnumProperty.create("north", NeighborType.class);
     public static final EnumProperty<NeighborType> SOUTH = EnumProperty.create("south", NeighborType.class);
@@ -186,7 +188,7 @@ public class Cable extends AbstractNodeBlock implements EntityBlock {
     }
 
     private void initMapper(){
-        shapeMapper = new CableShapeProvider.Mapper<>((cube, context) ->{
+        shapeMapper = new ShapeMapper<>(ShapeProvidersRegistry.get("cable"), (cube, context) ->{
                 Vector3f pos = cube.pos();
                 Vector3f size = cube.size();
                 return Shapes.box(pos.x(), pos.y(), pos.z(), pos.x() + size.x(), pos.y() + size.y(), pos.z() + size.z());
