@@ -1,4 +1,4 @@
-package ru.ie.phase.content.blocks.cable;
+package ru.ie.phase.foundation.net;
 
 import net.minecraft.core.BlockPos;
 

@@ -1,8 +1,9 @@
-package ru.ie.phase.foundation.net.data;
+package ru.ie.phase.foundation.data;
 
 import com.tterrag.registrate.AbstractRegistrate;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
+import org.jetbrains.annotations.NotNull;
 
 public class PhaseRegistrate extends AbstractRegistrate<PhaseRegistrate> {
 
@@ -14,7 +15,8 @@ public class PhaseRegistrate extends AbstractRegistrate<PhaseRegistrate> {
         return new PhaseRegistrate(modid);
     }
 
-    public PhaseRegistrate registerEventListeners(IEventBus bus) {
+    @NotNull
+    public PhaseRegistrate registerEventListeners(@NotNull IEventBus bus) {
         return super.registerEventListeners(bus);
     }
 

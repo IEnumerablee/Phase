@@ -6,7 +6,7 @@ import ru.ie.phase.foundation.shapes.ShapeProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.ie.phase.Utils3d.v;
+import static ru.ie.phase.utils.Utils3d.v;
 
 public class CableShapeProvider extends ShapeProvider {
 

@@ -1,8 +1,5 @@
 package ru.ie.phase.foundation.net;
 
-import ru.ie.phase.content.blocks.cable.ConnectDirection;
-import ru.ie.phase.content.blocks.cable.LinkType;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;

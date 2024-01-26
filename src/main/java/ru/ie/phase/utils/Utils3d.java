@@ -1,13 +1,13 @@
-package ru.ie.phase;
+package ru.ie.phase.utils;
 
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.mojang.math.Transformation;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 
 import java.util.ArrayList;
 import java.util.List;

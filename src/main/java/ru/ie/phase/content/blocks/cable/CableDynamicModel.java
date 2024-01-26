@@ -26,7 +26,7 @@ import ru.ie.phase.foundation.shapes.ShapeProvidersRegistry;
 import java.util.*;
 import java.util.function.Function;
 
-import static ru.ie.phase.Utils3d.createCube;
+import static ru.ie.phase.utils.Utils3d.createCube;
 
 public class CableDynamicModel implements IDynamicBakedModel {
 
@@ -84,12 +84,14 @@ public class CableDynamicModel implements IDynamicBakedModel {
         return false;
     }
 
+    @NotNull
     @Override
     public TextureAtlasSprite getParticleIcon() {
         Material material = ForgeHooksClient.getBlockMaterial(Blocks.STONE.getRegistryName());
         return spriteGetter.apply(material);
     }
 
+    @NotNull
     @Override
     public ItemOverrides getOverrides() {
         return overrides;
@@ -138,9 +140,8 @@ public class CableDynamicModel implements IDynamicBakedModel {
                 if(cube.meta().equals("connector"))
                     return createCube(cube.pos(), cube.size(), modelState.getRotation(), CONNECTOR, CONNECTOR, false);
 
-                boolean swapUv = false;
-                if (context.direction() == Direction.NORTH || context.direction() == Direction.SOUTH)
-                    swapUv = true;
+                boolean swapUv = context.direction() == Direction.NORTH || context.direction() == Direction.SOUTH;
+
                 return createCube(cube.pos(), cube.size(), modelState.getRotation(), SIDE, END, swapUv);
             }
         });

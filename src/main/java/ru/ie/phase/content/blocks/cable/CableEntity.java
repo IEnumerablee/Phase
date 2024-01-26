@@ -5,11 +5,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import ru.ie.phase.Phase;
-import ru.ie.phase.Utils;
 import ru.ie.phase.content.blocks.generic.IndexedBlockEntity;
 import ru.ie.phase.declaration.BlockEntities;
-import ru.ie.phase.foundation.net.ElectricalNetSpace;
-import ru.ie.phase.foundation.net.ICable;
+import ru.ie.phase.foundation.net.*;
+import ru.ie.phase.utils.Utils;
 
 import java.io.IOException;
 import java.util.HashMap;

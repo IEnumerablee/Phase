@@ -1,11 +1,11 @@
 package ru.ie.phase.content.blocks.generic;
 
-import ru.ie.phase.content.blocks.cable.ConnectDirection;
+import ru.ie.phase.foundation.net.ConnectDirection;
 import ru.ie.phase.foundation.net.ElectricalNetSpace;
 import ru.ie.phase.foundation.net.ICable;
 import ru.ie.phase.foundation.net.NetIndexed;
 
-public class NodeBlock extends AbstractNodeBlock {
+public class NodeBlock extends AbstractNetBlock {
     public NodeBlock(Properties properties) {
         super(properties);
     }

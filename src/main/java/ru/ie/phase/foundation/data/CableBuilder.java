@@ -1,4 +1,4 @@
-package ru.ie.phase.foundation.net.data;
+package ru.ie.phase.foundation.data;
 
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
@@ -17,27 +17,27 @@ import ru.ie.phase.content.blocks.cable.CableTextureRegistry;
 
 public class CableBuilder<P> extends BlockBuilder<Cable, P> {
 
-    private final Factory factory;
     private String resourceId;
 
     private CableBuilder(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, NonNullSupplier<BlockBehaviour.Properties> initialProperties, Factory factory) {
         super(owner, parent, name, callback, factory, initialProperties);
-        this.factory = factory;
     }
 
 
     public static <P> CableBuilder<P> create(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, Material material, float loss, String resourceId) {
-        CableBuilder<P> builder = new CableBuilder(owner, parent, name, callback, () -> BlockBehaviour.Properties.of(material), new Factory(loss));
+        CableBuilder<P> builder = new CableBuilder<>(owner, parent, name, callback, () -> BlockBehaviour.Properties.of(material), new Factory(loss));
         builder.resourceId = resourceId;
         return builder;
     }
 
+    @NotNull
     @Override
     public CableBuilder<P> simpleItem() {
         item().defaultModel().register();
         return this;
     }
 
+    @NotNull
     @Override
     public BlockEntry<Cable> register() {
         BlockEntry<Cable> entry = super.register();
@@ -65,7 +65,7 @@ public class CableBuilder<P> extends BlockBuilder<Cable, P> {
 
     private static class Factory implements NonNullFunction<BlockBehaviour.Properties, Cable>
     {
-        float loss = 0;
+        final float loss;
 
         Factory(float loss){
             this.loss = loss;

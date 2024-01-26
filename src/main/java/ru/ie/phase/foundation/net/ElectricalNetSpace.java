@@ -1,8 +1,6 @@
 package ru.ie.phase.foundation.net;
 
 import ru.ie.phase.Phase;
-import ru.ie.phase.content.blocks.cable.ConnectDirection;
-import ru.ie.phase.content.blocks.cable.LinkType;
 
 import java.util.*;
 import java.util.function.Predicate;

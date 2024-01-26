@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import ru.ie.phase.content.blocks.cable.CableModelLoader;
 import ru.ie.phase.declaration.BlockEntities;
 import ru.ie.phase.declaration.Blocks;
-import ru.ie.phase.foundation.net.data.PhaseRegistrate;
+import ru.ie.phase.foundation.data.PhaseRegistrate;
 
 @Mod("phase")
 @Mod.EventBusSubscriber(modid = Phase.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)

@@ -1,24 +1,24 @@
 package ru.ie.phase.content.blocks.generic;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import ru.ie.phase.content.blocks.cable.ConnectDirection;
+import org.jetbrains.annotations.NotNull;
+import ru.ie.phase.foundation.net.ConnectDirection;
 import ru.ie.phase.foundation.net.NetIndexed;
 
-public abstract class AbstractNodeBlock extends Block {
+public abstract class AbstractNetBlock extends Block {
 
-    public AbstractNodeBlock(Properties properties) {
+    public AbstractNetBlock(Properties properties) {
         super(properties);
     }
 
 
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState state2, boolean p_60519_)
+    public void onRemove(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull BlockState state2, boolean p_60519_)
     {
         if(!level.isClientSide() && state2.isAir()) {
             NetIndexed me = (NetIndexed) level.getBlockEntity(pos);
@@ -28,7 +28,7 @@ public abstract class AbstractNodeBlock extends Block {
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos thisPos, Block block, BlockPos neighborPos, boolean p_60514_)
+    public void neighborChanged(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos thisPos, @NotNull Block block, @NotNull BlockPos neighborPos, boolean p_60514_)
     {
         super.neighborChanged(state, level, thisPos, block, neighborPos, p_60514_);
 

@@ -1,10 +1,9 @@
-package ru.ie.phase.content.blocks.cable;
+package ru.ie.phase.foundation.net;
 
 import ru.ie.phase.Phase;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;

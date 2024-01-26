@@ -2,11 +2,8 @@ package ru.ie.phase.declaration;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import ru.ie.phase.Phase;
 import ru.ie.phase.content.blocks.cable.Cable;
-import ru.ie.phase.content.blocks.cable.CableModelLoader;
 import ru.ie.phase.content.blocks.consumer.Consumer;
 import ru.ie.phase.content.blocks.generator.Generator;
 
