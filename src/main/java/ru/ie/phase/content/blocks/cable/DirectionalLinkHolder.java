@@ -4,19 +4,20 @@ import ru.ie.phase.Phase;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 public class DirectionalLinkHolder implements Serializable {
 
-    private final HashMap<Direction, LinkEntry> links = new HashMap<>();
+    private final HashMap<ConnectDirection, LinkEntry> links = new HashMap<>();
 
     public DirectionalLinkHolder(){
         initLinks();
     }
 
-    public void changeLink(Direction dir, LinkType linkType, @Nullable UUID id)
+    public void changeLink(ConnectDirection dir, LinkType linkType, @Nullable UUID id)
     {
         Phase.LOGGER.debug("d - %s lt - %s ID: %s".formatted(dir, linkType, id));
         LinkEntry entry = links.get(dir);
@@ -35,8 +36,13 @@ public class DirectionalLinkHolder implements Serializable {
         entry.id = null;
     }
 
-    public LinkType getLinkType(Direction dir){
-        return links.get(dir).linkType;
+    public ConnectDirection getDirection(UUID id)
+    {
+        for(ConnectDirection dir : ConnectDirection.values()){
+            LinkEntry entry = links.get(dir);
+            if(entry.id != null && entry.id.equals(id)) return dir;
+        }
+        throw new IllegalArgumentException("id not found");
     }
 
     public List<UUID> getLinks(LinkType linkType)
@@ -48,7 +54,7 @@ public class DirectionalLinkHolder implements Serializable {
     }
 
     private void initLinks(){
-        for(Direction direction : Direction.values())
+        for(ConnectDirection direction : ConnectDirection.values())
             links.put(direction, new LinkEntry());
     }
 

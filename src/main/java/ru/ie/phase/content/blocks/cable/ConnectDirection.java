@@ -2,10 +2,10 @@ package ru.ie.phase.content.blocks.cable;
 
 import net.minecraft.core.BlockPos;
 
-public enum Direction {
+public enum ConnectDirection {
     NORTH {
         @Override
-        public Direction invert() {
+        public ConnectDirection invert() {
             return SOUTH;
         }
 
@@ -16,7 +16,7 @@ public enum Direction {
     },
     SOUTH {
         @Override
-        public Direction invert() {
+        public ConnectDirection invert() {
             return NORTH;
         }
 
@@ -27,7 +27,7 @@ public enum Direction {
     },
     WEST {
         @Override
-        public Direction invert() {
+        public ConnectDirection invert() {
             return EAST;
         }
 
@@ -38,7 +38,7 @@ public enum Direction {
     },
     EAST {
         @Override
-        public Direction invert() {
+        public ConnectDirection invert() {
             return WEST;
         }
 
@@ -49,7 +49,7 @@ public enum Direction {
     },
     UP {
         @Override
-        public Direction invert() {
+        public ConnectDirection invert() {
             return DOWN;
         }
 
@@ -60,7 +60,7 @@ public enum Direction {
     },
     DOWN {
         @Override
-        public Direction invert() {
+        public ConnectDirection invert() {
             return UP;
         }
 
@@ -70,12 +70,12 @@ public enum Direction {
         }
     };
 
-    public abstract Direction invert();
+    public abstract ConnectDirection invert();
 
     public abstract boolean check(BlockPos p1, BlockPos p2);
 
-    public static Direction getDir(BlockPos p1, BlockPos p2){
-        for(Direction d : Direction.values())
+    public static ConnectDirection getDir(BlockPos p1, BlockPos p2){
+        for(ConnectDirection d : ConnectDirection.values())
             if(d.check(p1, p2)) return d;
         throw new IllegalArgumentException("Positions cannot be the equal");
     }

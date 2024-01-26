@@ -9,7 +9,6 @@ import ru.ie.phase.content.blocks.generator.GeneratorEntity;
 public class BlockEntities {
 
     public final static BlockEntityEntry<CableEntity> CABLE_ENTITY = Phase.REGISTRATE.blockEntity("cable_entity", CableEntity::new)
-            .validBlocks(Blocks.CABLE)
             .register();
     public final static BlockEntityEntry<GeneratorEntity> GENERATOR_ENTITY = Phase.REGISTRATE.blockEntity("generator_entity", GeneratorEntity::new)
             .validBlock(Blocks.GENERATOR)

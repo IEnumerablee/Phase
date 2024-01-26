@@ -36,7 +36,7 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
     }
 
     @Override
-    public void createLink(UUID id, Direction dir, LinkType linkType){
+    public void createLink(UUID id, ConnectDirection dir, LinkType linkType){
         linkHolder.changeLink(dir, linkType, id);
     }
 
@@ -84,6 +84,10 @@ public class CableEntity extends IndexedBlockEntity implements ICable{
             Phase.LOGGER.error("Failed to load netdata for block %s %s %s)".formatted(pos.getX(), pos.getY(), pos.getZ()));
             throw new RuntimeException(e);
         }
+    }
+
+    public ConnectDirection getDir(UUID id){
+        return linkHolder.getDirection(id);
     }
 
     @Override
