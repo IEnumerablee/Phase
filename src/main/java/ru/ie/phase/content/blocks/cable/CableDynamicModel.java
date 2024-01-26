@@ -19,15 +19,14 @@ import net.minecraftforge.client.model.data.IModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ie.phase.Phase;
-import ru.ie.phase.foundation.shapes.ShapeMapper;
-import ru.ie.phase.foundation.shapes.ShapeProvider;
 import ru.ie.phase.foundation.shapes.NeighborType;
+import ru.ie.phase.foundation.shapes.ShapeMapper;
 import ru.ie.phase.foundation.shapes.ShapeProvidersRegistry;
 
 import java.util.*;
 import java.util.function.Function;
 
-import static ru.ie.phase.Utils3d.*;
+import static ru.ie.phase.Utils3d.createCube;
 
 public class CableDynamicModel implements IDynamicBakedModel {
 

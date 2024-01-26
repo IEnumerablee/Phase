@@ -25,13 +25,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ie.phase.content.blocks.generic.AbstractNodeBlock;
-import ru.ie.phase.foundation.shapes.ShapeMapper;
-import ru.ie.phase.foundation.shapes.ShapeProvider;
-import ru.ie.phase.foundation.shapes.NeighborType;
 import ru.ie.phase.foundation.net.ElectricalNetSpace;
 import ru.ie.phase.foundation.net.ICable;
 import ru.ie.phase.foundation.net.NetIndexed;
 import ru.ie.phase.foundation.net.NetNode;
+import ru.ie.phase.foundation.shapes.NeighborType;
+import ru.ie.phase.foundation.shapes.ShapeMapper;
 import ru.ie.phase.foundation.shapes.ShapeProvidersRegistry;
 
 import javax.annotation.Nonnull;
