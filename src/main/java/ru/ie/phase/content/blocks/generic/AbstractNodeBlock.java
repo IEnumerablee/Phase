@@ -36,7 +36,9 @@ public abstract class AbstractNodeBlock extends Block {
             BlockEntity neighbor = level.getBlockEntity(neighborPos);
 
             if(me instanceof NetIndexed && neighbor instanceof NetIndexed) {
-                ConnectDirection dir = ConnectDirection.getDir(thisPos, neighborPos);
+              
+                Direction dir = Direction.getDir(thisPos, neighborPos);
+
                 connect((NetIndexed) neighbor, (NetIndexed) me, dir);
             }
         }
