@@ -9,6 +9,8 @@ public class ShapeProvidersRegistry {
 
     static {
         providers.put("cable", new CableShapeProvider());
+
+        providers.values().forEach(ShapeProvider::init);
     }
 
     public static ShapeProvider get(String id){

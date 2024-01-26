@@ -11,11 +11,11 @@ import java.util.function.BiConsumer;
 
 public abstract class ShapeProvider {
 
-    private final List<Cube> base;
+    private List<Cube> base;
 
     private final Map<Direction, Map<NeighborType, List<Cube>>> shapesMap = new HashMap<>();
 
-    protected ShapeProvider(){
+    void init(){
         initMap();
         base = getBase();
         createShapes();
