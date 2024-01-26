@@ -1,5 +1,6 @@
 package ru.ie.phase.content.blocks.cable;
 
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -185,8 +186,10 @@ public class Cable extends AbstractNodeBlock implements EntityBlock {
     }
 
     private void initMapper(){
-        shapeMapper = new CableShapeProvider.Mapper<>((pos, size) ->
-            Shapes.box(pos.x(), pos.y(), pos.z(), pos.x() + size.x(), pos.y() + size.y(), pos.z() + size.z())
-        );
+        shapeMapper = new CableShapeProvider.Mapper<>((cube, context) ->{
+                Vector3f pos = cube.pos();
+                Vector3f size = cube.size();
+                return Shapes.box(pos.x(), pos.y(), pos.z(), pos.x() + size.x(), pos.y() + size.y(), pos.z() + size.z());
+        });
     }
 }

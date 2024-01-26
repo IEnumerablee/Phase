@@ -1,5 +1,6 @@
 package ru.ie.phase.content.blocks.cable;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -8,6 +9,7 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -33,18 +35,31 @@ public class CableDynamicModel implements IDynamicBakedModel {
 
     private CableShapeProvider.Mapper<List<BakedQuad>> shapeMapper;
 
+    private TextureAtlasSprite SIDE;
+    private TextureAtlasSprite END;
+    private TextureAtlasSprite BASE;
+    private TextureAtlasSprite CONNECTOR;
+
+    private boolean isInit = false;
+
     public CableDynamicModel(ModelState modelState, Function<Material, TextureAtlasSprite> spriteGetter,
                              ItemOverrides overrides, ItemTransforms itemTransforms) {
         this.modelState = modelState;
         this.spriteGetter = spriteGetter;
         this.overrides = overrides;
         this.itemTransforms = itemTransforms;
-        initMapper();
     }
 
     @NotNull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState blockState, @Nullable Direction direction, @NotNull Random random, @NotNull IModelData iModelData) {
+    public List<BakedQuad> getQuads(@Nullable BlockState blockState, @Nullable Direction direction, @NotNull Random random, @NotNull IModelData iModelData)
+    {
+
+        if(!isInit){
+            initTextures();
+            initMapper();
+            isInit = true;
+        }
 
         Map<Direction, NeighborType> sidesMap = new HashMap<>();
         List<BakedQuad> quads = new ArrayList<>();
@@ -94,14 +109,34 @@ public class CableDynamicModel implements IDynamicBakedModel {
         return false;
     }
 
+    private TextureAtlasSprite getTexture(String path) {
+        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation(Phase.MODID, path));
+    }
+
+    private void initTextures(){
+        END = getTexture("block/cable/copper/end");
+        SIDE = getTexture("block/cable/copper/side");
+        BASE = getTexture("block/cable/copper/base");
+        CONNECTOR = getTexture("block/cable/connector");
+    }
+
     private void initMapper(){
 
-        Material material = ForgeHooksClient.getBlockMaterial(Blocks.STONE.getRegistryName());
-        TextureAtlasSprite textureSide = spriteGetter.apply(material);
+        shapeMapper = new CableShapeProvider.Mapper<>((cube, context) -> {
 
-        shapeMapper = new CableShapeProvider.Mapper<>((pos, size) ->
-                createCube(pos, size, modelState.getRotation(), textureSide)
-        );
+            if(context.isBase()) {
+                return createCube(cube.pos(), cube.size(), modelState.getRotation(), BASE, BASE, false);
+            }else {
+
+                if(context.neighborType() == NeighborType.NODE)
+                    return createCube(cube.pos(), cube.size(), modelState.getRotation(), CONNECTOR, CONNECTOR, false);
+
+                boolean swapUv = false;
+                if (context.direction() == Direction.NORTH || context.direction() == Direction.SOUTH)
+                    swapUv = true;
+                return createCube(cube.pos(), cube.size(), modelState.getRotation(), SIDE, END, swapUv);
+            }
+        });
     }
 
 }

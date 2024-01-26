@@ -1,8 +1,11 @@
 package ru.ie.phase.content.blocks.cable;
 
 import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +20,10 @@ public class CableShapeProvider {
 
     private static Map<Direction, Map<NeighborType, List<Cube>>> shapesMap = new HashMap<>();
 
-    private static final Cube CABLE = new Cube(v(0.2999f, 0.2999f, 0), v(0.4002f, 0.4002f, 0.5f));
+    private static final Cube CABLE = new Cube(v(0.3f, 0.3f, 0), v(0.4f, 0.4f, 0.5f));
+    private static final Cube CABLE_CORE = new Cube(v(0.31f, 0.31f, 0), v(0.38f, 0.38f, 0.71f));
     private static final Cube CONNECTOR = new Cube(v(0.25f, 0.25f, 0), v(0.5f, 0.5f, 0.35f));
-    private static final Cube BASE = new Cube(v(0.3f, 0.3f, 0.3f), v(0.4f, 0.4f, 0.4f));
+    private static final Cube BASE = new Cube(v(0.295f, 0.295f, 0.295f), v(0.41f, 0.41f, 0.41f));
 
     static{
         initMap();
@@ -34,7 +38,7 @@ public class CableShapeProvider {
     private static void createShapes()
     {
 
-        appendConnectionConf(NeighborType.CABLE, List.of(CABLE));
+        appendConnectionConf(NeighborType.CABLE, List.of(CABLE, CABLE_CORE));
         appendConnectionConf(NeighborType.NODE, List.of(CABLE, CONNECTOR));
         appendConnectionConf(NeighborType.BLOCK, new ArrayList<>());
         appendConnectionConf(NeighborType.NONE, new ArrayList<>());
@@ -98,11 +102,11 @@ public class CableShapeProvider {
     {
         private List<T> base = new ArrayList<>();
 
-        private final BiFunction<Vector3f, Vector3f, T> mapFunction;
+        private final BiFunction<Cube, ShapeContext, T> mapFunction;
 
         private final Map<Direction, Map<NeighborType, List<T>>> mappedShapesMap = new HashMap<>();
 
-        public Mapper(BiFunction<Vector3f, Vector3f, T> mapFunction){
+        public Mapper(BiFunction<Cube, ShapeContext, T> mapFunction){
             this.mapFunction = mapFunction;
             initMap();
             map();
@@ -121,15 +125,14 @@ public class CableShapeProvider {
 
         private void map()
         {
-
-            CableShapeProvider.base.forEach(c -> this.base.add(mapFunction.apply(c.pos, c.size)));
+            CableShapeProvider.base.forEach(c -> this.base.add(mapFunction.apply(c, new ShapeContext())));
 
             shapesMap.forEach((direction, typeMap) -> typeMap.forEach((type, cubes) -> {
 
                 List<T> shape = new ArrayList<>();
 
                 cubes.forEach(cube -> {
-                    shape.add(mapFunction.apply(cube.pos, cube.size));
+                    shape.add(mapFunction.apply(cube, new ShapeContext(type, direction)));
                 });
                 mappedShapesMap.get(direction).put(type, shape);
             }));
@@ -142,17 +145,63 @@ public class CableShapeProvider {
 
     }
 
-    private static class Cube
+    public static class ShapeContext
     {
-        Cube(Vector3f pos, Vector3f size){
+        @Nullable
+        private final NeighborType neighborType;
+
+        @Nullable
+        private final Direction direction;
+
+        private final boolean isBase;
+
+        private ShapeContext(@Nonnull NeighborType neighborType, @Nonnull Direction direction){
+            this.direction = direction;
+            this.neighborType = neighborType;
+            isBase = false;
+        }
+
+        public ShapeContext(){
+            direction = null;
+            neighborType = null;
+            isBase = true;
+        }
+
+        @Nullable
+        public NeighborType neighborType() {
+            return neighborType;
+        }
+
+        @Nullable
+        public Direction direction() {
+            return direction;
+        }
+
+        public boolean isBase(){
+            return isBase;
+        }
+
+    }
+
+    public static class Cube
+    {
+        private final Vector3f pos;
+        private final Vector3f size;
+
+        private Cube(Vector3f pos, Vector3f size){
             this.pos = pos;
             this.size = size;
         }
 
-        Vector3f pos;
-        Vector3f size;
+        public Vector3f pos(){
+            return pos;
+        }
 
-        void fix(){
+        public Vector3f size(){
+            return size;
+        }
+
+        private void fix(){
             if(size.x() < 0){
                 pos.setX(pos.x() + size.x());
                 size.setX(-size.x());
@@ -167,7 +216,7 @@ public class CableShapeProvider {
             }
         }
 
-        Cube copy(){
+        private Cube copy(){
             return new Cube(pos.copy(), size.copy());
         }
     }

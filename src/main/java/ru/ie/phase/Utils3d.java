@@ -39,7 +39,9 @@ public class Utils3d {
         }
     }
 
-    public static BakedQuad createQuad(Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4, Transformation rotation, TextureAtlasSprite sprite)
+    public static BakedQuad createQuad(Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4,
+                                       Transformation rotation, TextureAtlasSprite sprite,
+                                       boolean swapUV)
     {
         Vector3f normal = v3.copy();
         normal.sub(v2);
@@ -61,65 +63,98 @@ public class Utils3d {
 
         var builder = new BakedQuadBuilder(sprite);
         builder.setQuadOrientation(Direction.getNearest(normal.x(), normal.y(), normal.z()));
-        putVertex(builder, normal, vv1, 0, 0, sprite);
-        putVertex(builder, normal, vv2, 0, th, sprite);
-        putVertex(builder, normal, vv3, tw, th, sprite);
-        putVertex(builder, normal, vv4, tw, 0, sprite);
+        if(swapUV) {
+            putVertex(builder, normal, vv1, 0, 0, sprite);
+            putVertex(builder, normal, vv2, th, 0, sprite);
+            putVertex(builder, normal, vv3, th, tw, sprite);
+            putVertex(builder, normal, vv4, 0, tw, sprite);
+        }else{
+            putVertex(builder, normal, vv1, 0, 0, sprite);
+            putVertex(builder, normal, vv2, 0, th, sprite);
+            putVertex(builder, normal, vv3, tw, th, sprite);
+            putVertex(builder, normal, vv4, tw, 0, sprite);
+        }
         return builder.build();
     }
 
     public static List<BakedQuad> createCube(Vector3f position, Vector3f size,
-                                             Transformation rotation, TextureAtlasSprite sprite)
+                                             Transformation rotation,
+                                             TextureAtlasSprite spriteSide, TextureAtlasSprite spriteEnd,
+                                             boolean swapUV)
     {
-        return createCube(position, size.y(), size.x(), size.z(), rotation, sprite);
+        return createCube(position, size.y(), size.x(), size.z(), rotation, spriteSide, spriteEnd, swapUV);
     }
 
     public static List<BakedQuad> createCube(Vector3f position, float height, float weight, float length,
-                                             Transformation rotation, TextureAtlasSprite sprite)
+                                             Transformation rotation,
+                                             TextureAtlasSprite spriteSide, TextureAtlasSprite spriteEnd,
+                                             boolean swapUV)
     {
+
         List<BakedQuad> quads = new ArrayList<>();
+
+        TextureAtlasSprite sprite1 = spriteSide;
+        TextureAtlasSprite sprite2 = spriteSide;
+        TextureAtlasSprite sprite3 = spriteSide;
+        TextureAtlasSprite sprite4 = spriteSide;
+        TextureAtlasSprite sprite5 = spriteSide;
+        TextureAtlasSprite sprite6 = spriteSide;
+
+        boolean swapUV2 = swapUV;
+
+        if(length > weight && length > height){
+            sprite1 = spriteEnd;
+            sprite2 = spriteEnd;
+        }else if(weight > length && weight > height){
+            sprite5 = spriteEnd;
+            sprite6 = spriteEnd;
+            swapUV2 = !swapUV2;
+        }else{
+            sprite3 = spriteEnd;
+            sprite4 = spriteEnd;
+        }
 
         quads.add(createQuad(
                 v(position.x(), position.y() + height, position.z()),
                 v(position.x() + weight, position.y() + height, position.z()),
                 v(position.x() + weight, position.y(), position.z()),
                 v(position.x(), position.y(), position.z()),
-                rotation, sprite));
+                rotation, sprite1, swapUV2));
 
         quads.add(createQuad(
                 v(position.x(), position.y(), position.z() + length),
                 v(position.x() + weight, position.y(), position.z() + length),
                 v(position.x() + weight, position.y() + height, position.z() + length),
                 v(position.x(), position.y() + height, position.z() + length),
-                rotation, sprite));
+                rotation, sprite2, swapUV2));
 
         quads.add(createQuad(
                 v(position.x(), position.y(), position.z()),
                 v(position.x() + weight, position.y(), position.z()),
                 v(position.x() + weight, position.y() , position.z() + length),
                 v(position.x(), position.y(), position.z() + length),
-                rotation, sprite));
+                rotation, sprite3, !swapUV));
 
         quads.add(createQuad(
                 v(position.x(), position.y() + height, position.z() + length),
                 v(position.x() + weight, position.y() + height, position.z() + length),
                 v(position.x() + weight, position.y() + height, position.z()),
                 v(position.x(), position.y() + height, position.z()),
-                rotation, sprite));
+                rotation, sprite4, !swapUV));
 
         quads.add(createQuad(
                 v(position.x(), position.y(), position.z()),
                 v(position.x(), position.y(), position.z() + length),
                 v(position.x(), position.y() + height, position.z() + length),
                 v(position.x(), position.y() + height, position.z()),
-                rotation, sprite));
+                rotation, sprite5, swapUV));
 
         quads.add(createQuad(
                 v(position.x() + weight, position.y() + height, position.z()),
                 v(position.x() + weight, position.y() + height, position.z() + length),
                 v(position.x() + weight, position.y(), position.z() + length),
                 v(position.x() + weight, position.y(), position.z()),
-                rotation.inverse(), sprite));
+                rotation.inverse(), sprite6, swapUV));
 
         return quads;
     }

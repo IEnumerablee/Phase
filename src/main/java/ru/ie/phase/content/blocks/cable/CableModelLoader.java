@@ -24,6 +24,12 @@ public class CableModelLoader implements IModelLoader<CableModelLoader.Generator
 
     public static final ResourceLocation LOADER = new ResourceLocation(Phase.MODID, "cableloader");
 
+    public static final ResourceLocation SIDE = new ResourceLocation(Phase.MODID, "block/cable/copper/side");
+    public static final ResourceLocation END = new ResourceLocation(Phase.MODID, "block/cable/copper/end");
+    public static final ResourceLocation BASE = new ResourceLocation(Phase.MODID, "block/cable/copper/base");
+    public static final ResourceLocation CONNECTOR = new ResourceLocation(Phase.MODID, "block/cable/connector");
+
+
     @Override
     public GeneratorModelGeometry read(JsonDeserializationContext jsonDeserializationContext, JsonObject jsonObject) {
         return new GeneratorModelGeometry();
@@ -44,8 +50,12 @@ public class CableModelLoader implements IModelLoader<CableModelLoader.Generator
 
         @Override
         public Collection<Material> getTextures(IModelConfiguration iModelConfiguration, Function<ResourceLocation, UnbakedModel> function, Set<Pair<String, String>> set) {
-            Material material = ForgeHooksClient.getBlockMaterial(Blocks.STONE.getRegistryName());
-            return List.of(material);
+            return List.of(t(SIDE), t(END), t(BASE), t(CONNECTOR));
         }
+
+        private Material t(ResourceLocation location){
+            return ForgeHooksClient.getBlockMaterial(location);
+        }
+
     }
 }
