@@ -10,6 +10,7 @@ import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -56,9 +57,8 @@ public class CableDynamicModel implements IDynamicBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState blockState, @Nullable Direction direction, @NotNull Random random, @NotNull IModelData iModelData)
     {
-
         if(!isInit){
-            initTextures();
+            if(blockState != null) initTextures(blockState.getBlock());
             initMapper();
             isInit = true;
         }
@@ -115,10 +115,13 @@ public class CableDynamicModel implements IDynamicBakedModel {
         return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation(Phase.MODID, path));
     }
 
-    private void initTextures(){
-        END = getTexture("block/cable/copper/end");
-        SIDE = getTexture("block/cable/copper/side");
-        BASE = getTexture("block/cable/copper/base");
+    private void initTextures(Block block){
+
+        String id = CableTextureRegistry.getId(block);
+
+        END = getTexture("block/cable/%s/end".formatted(id));
+        SIDE = getTexture("block/cable/%s/side".formatted(id));
+        BASE = getTexture("block/cable/base");
         CONNECTOR = getTexture("block/cable/connector");
     }
 

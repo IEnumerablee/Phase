@@ -15,6 +15,7 @@ import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import ru.ie.phase.Phase;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -23,12 +24,6 @@ import java.util.function.Function;
 public class CableModelLoader implements IModelLoader<CableModelLoader.GeneratorModelGeometry> {
 
     public static final ResourceLocation LOADER = new ResourceLocation(Phase.MODID, "cableloader");
-
-    public static final ResourceLocation SIDE = new ResourceLocation(Phase.MODID, "block/cable/copper/side");
-    public static final ResourceLocation END = new ResourceLocation(Phase.MODID, "block/cable/copper/end");
-    public static final ResourceLocation BASE = new ResourceLocation(Phase.MODID, "block/cable/copper/base");
-    public static final ResourceLocation CONNECTOR = new ResourceLocation(Phase.MODID, "block/cable/connector");
-
 
     @Override
     public GeneratorModelGeometry read(JsonDeserializationContext jsonDeserializationContext, JsonObject jsonObject) {
@@ -50,7 +45,18 @@ public class CableModelLoader implements IModelLoader<CableModelLoader.Generator
 
         @Override
         public Collection<Material> getTextures(IModelConfiguration iModelConfiguration, Function<ResourceLocation, UnbakedModel> function, Set<Pair<String, String>> set) {
-            return List.of(t(SIDE), t(END), t(BASE), t(CONNECTOR));
+
+            List<Material> materials = new ArrayList<>();
+
+            CableTextureRegistry.getAll().forEach(id -> {
+                materials.add(t(new ResourceLocation(Phase.MODID, "block/cable/%s/end".formatted(id))));
+                materials.add(t(new ResourceLocation(Phase.MODID, "block/cable/%s/side".formatted(id))));
+            });
+
+            materials.add(t(new ResourceLocation(Phase.MODID, "block/cable/connector")));
+            materials.add(t(new ResourceLocation(Phase.MODID, "block/cable/base")));
+
+            return materials;
         }
 
         private Material t(ResourceLocation location){

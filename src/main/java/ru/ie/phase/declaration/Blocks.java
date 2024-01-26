@@ -12,20 +12,22 @@ import ru.ie.phase.content.blocks.generator.Generator;
 
 public class Blocks {
 
-    public final static BlockEntry<Cable> CABLE = Phase.REGISTRATE.cable("cable", Material.METAL)
-            .loss(0.1f)
-            .defaultLoot()
-            .blockstate((context, provider) ->{
-
-                BlockModelBuilder cableModel = provider.models().getBuilder(Blocks.CABLE.getId().getPath())
-                        .parent(provider.models().getExistingFile(provider.mcLoc("cube")))
-                        .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(CableModelLoader.LOADER, blockModelBuilder, helper) { })
-                        .end();
-
-                provider.simpleBlock(context.get(), cableModel);
-
-            })
+    public final static BlockEntry<Cable> COPPER_CABLE = Phase.REGISTRATE.cable("copper_cable", "copper", Material.METAL,0.05f)
+            .model()
             .simpleItem()
+            .defaultLoot()
+            .register();
+
+    public final static BlockEntry<Cable> IRON_CABLE = Phase.REGISTRATE.cable("iron_cable", "iron", Material.METAL,0.1f)
+            .model()
+            .simpleItem()
+            .defaultLoot()
+            .register();
+
+    public final static BlockEntry<Cable> GOLD_CABLE = Phase.REGISTRATE.cable("gold_cable", "gold", Material.METAL,0.01f)
+            .model()
+            .simpleItem()
+            .defaultLoot()
             .register();
     public final static BlockEntry<Generator> GENERATOR = Phase.REGISTRATE.block("generator", Generator::new)
             .defaultBlockstate()
