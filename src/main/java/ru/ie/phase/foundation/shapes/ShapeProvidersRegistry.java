@@ -1,5 +1,7 @@
 package ru.ie.phase.foundation.shapes;
 
+import ru.ie.phase.content.blocks.cable.CableShapeProvider;
+
 import java.util.HashMap;
 import java.util.Map;
 

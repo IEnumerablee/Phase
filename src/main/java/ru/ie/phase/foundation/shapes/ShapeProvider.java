@@ -91,7 +91,7 @@ public abstract class ShapeProvider {
         private final Vector3f pos;
         private final Vector3f size;
 
-        Cube(Vector3f pos, Vector3f size){
+        public Cube(Vector3f pos, Vector3f size){
             this.pos = pos;
             this.size = size;
         }
