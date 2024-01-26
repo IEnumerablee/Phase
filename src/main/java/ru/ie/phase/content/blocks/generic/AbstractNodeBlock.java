@@ -1,6 +1,7 @@
 package ru.ie.phase.content.blocks.generic;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -37,7 +38,7 @@ public abstract class AbstractNodeBlock extends Block {
 
             if(me instanceof NetIndexed && neighbor instanceof NetIndexed) {
               
-                Direction dir = Direction.getDir(thisPos, neighborPos);
+                ConnectDirection dir = ConnectDirection.getDir(thisPos, neighborPos);
 
                 connect((NetIndexed) neighbor, (NetIndexed) me, dir);
             }
