@@ -15,8 +15,7 @@ public enum NeighborType implements StringRepresentable {
 
     NONE((block, blockEntity) -> blockEntity == null && (block == Blocks.AIR || block == Blocks.CAVE_AIR || block == Blocks.VOID_AIR)),
     CABLE((block, blockEntity) -> blockEntity instanceof ICable),
-    NODE((block, blockEntity) -> blockEntity instanceof NetNode),
-    BLOCK((block, blockEntity) -> block != Blocks.AIR && block != Blocks.CAVE_AIR && block != Blocks.VOID_AIR);
+    NODE((block, blockEntity) -> blockEntity instanceof NetNode);
 
     private final BiPredicate<Block, BlockEntity> checker;
 

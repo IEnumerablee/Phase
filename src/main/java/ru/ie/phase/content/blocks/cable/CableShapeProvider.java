@@ -25,7 +25,6 @@ public class CableShapeProvider extends ShapeProvider {
 
         appendConnectionConf(NeighborType.CABLE, List.of(CABLE, CABLE_HIDER));
         appendConnectionConf(NeighborType.NODE, List.of(CABLE, CONNECTOR));
-        appendConnectionConf(NeighborType.BLOCK, new ArrayList<>());
         appendConnectionConf(NeighborType.NONE, new ArrayList<>());
 
     }
