@@ -4,9 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import ru.ie.phase.Phase;
-import ru.ie.phase.foundation.net.ElectricalNetSpace;
-import ru.ie.phase.foundation.net.NetConsumer;
-import ru.ie.phase.foundation.net.VoltageLevel;
+import ru.ie.phase.foundation.net.electrical.NetConsumer;
+import ru.ie.phase.foundation.net.electrical.VoltageLevel;
 
 public abstract class AbstractConsumer extends IndexedBlockEntity implements NetConsumer {
 

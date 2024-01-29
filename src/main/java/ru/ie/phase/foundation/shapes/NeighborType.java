@@ -4,7 +4,6 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import ru.ie.phase.foundation.net.ICable;
 import ru.ie.phase.foundation.net.NetNode;
 
 import java.util.Arrays;

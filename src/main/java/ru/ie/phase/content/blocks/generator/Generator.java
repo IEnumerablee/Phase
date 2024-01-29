@@ -13,7 +13,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import ru.ie.phase.content.blocks.generic.NodeBlock;
 import ru.ie.phase.declaration.BlockEntities;
-import ru.ie.phase.foundation.net.NetGenerator;
+import ru.ie.phase.foundation.net.electrical.NetGenerator;
 
 public class Generator extends NodeBlock implements EntityBlock {
 

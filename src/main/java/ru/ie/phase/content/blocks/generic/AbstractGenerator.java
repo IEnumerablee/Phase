@@ -4,9 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import ru.ie.phase.foundation.net.ElectricalNetSpace;
-import ru.ie.phase.foundation.net.NetGenerator;
-import ru.ie.phase.foundation.net.VoltageLevel;
+import ru.ie.phase.foundation.net.electrical.NetGenerator;
+import ru.ie.phase.foundation.net.electrical.VoltageLevel;
 
 import java.util.HashMap;
 import java.util.Map;

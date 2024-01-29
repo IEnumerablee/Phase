@@ -1,4 +1,4 @@
-package ru.ie.phase.foundation.net;
+package ru.ie.phase.foundation.net.electrical;
 
 public enum VoltageLevel {
 

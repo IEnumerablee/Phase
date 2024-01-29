@@ -1,8 +1,10 @@
-package ru.ie.phase.foundation.net;
+package ru.ie.phase.foundation.net.electrical;
+
+import ru.ie.phase.foundation.net.NetNode;
 
 import java.util.UUID;
 
-public interface NetGenerator extends NetNode{
+public interface NetGenerator extends NetNode {
 
     void updatePowerStatement();
 

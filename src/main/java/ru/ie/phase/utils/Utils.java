@@ -1,8 +1,15 @@
 package ru.ie.phase.utils;
 
+import ru.ie.phase.foundation.net.NetElement;
+
 import java.io.*;
 
 public class Utils {
+
+    public static void checkElement(Object o){
+        if(!o.getClass().isAnnotationPresent(NetElement.class))
+            throw new IllegalArgumentException("side interface class is not annotate as NetElement");
+    }
 
     public static byte[] writeToByteArray(Object... objects) throws IOException {
 
