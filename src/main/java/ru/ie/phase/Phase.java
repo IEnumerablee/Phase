@@ -12,6 +12,8 @@ import ru.ie.phase.content.blocks.cable.CableModelLoader;
 import ru.ie.phase.declaration.BlockEntities;
 import ru.ie.phase.declaration.Blocks;
 import ru.ie.phase.foundation.data.PhaseRegistrate;
+import ru.ie.phase.foundation.net.NetRegistry;
+import ru.ie.phase.foundation.net.electrical.ElecricalNetSpace;
 
 @Mod("phase")
 @Mod.EventBusSubscriber(modid = Phase.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -22,6 +24,8 @@ public class Phase {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final PhaseRegistrate REGISTRATE = PhaseRegistrate.create(MODID);
 
+    public static final NetRegistry NET_REGISTRY = new NetRegistry();
+
     public Phase() {
         init();
     }
@@ -31,13 +35,14 @@ public class Phase {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         REGISTRATE.registerEventListeners(modEventBus);
 
+        NET_REGISTRY.register("electrical", new ElecricalNetSpace());
+
         Blocks.register();
         BlockEntities.register();
     }
 
     @SubscribeEvent
     public static void onRegisterModels(ModelRegistryEvent event) {
-        Phase.LOGGER.debug("ml e");
         ModelLoaderRegistry.registerLoader(CableModelLoader.LOADER, new CableModelLoader());
     }
 
