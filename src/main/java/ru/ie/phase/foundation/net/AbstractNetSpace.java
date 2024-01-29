@@ -7,10 +7,10 @@ import java.util.*;
 
 public abstract class AbstractNetSpace<T extends Agent> {
 
-    private final HashRegistry<NetNode> nodes = new HashRegistry<>();
-    private final HashRegistry<Agent> agents= new HashRegistry<>();
+    protected final HashRegistry<NetNode> nodes = new HashRegistry<>();
+    protected final HashRegistry<Agent> agents= new HashRegistry<>();
 
-    private final Map<UUID, UUID> nodeJoints = new HashMap<>();
+    protected final Map<UUID, UUID> nodeJoints = new HashMap<>();
 
     public final UUID createAgent(T agent){
         Utils.checkElement(agent);
